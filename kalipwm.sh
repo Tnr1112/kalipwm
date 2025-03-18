@@ -100,9 +100,9 @@ ln -s -f ~/.tmux/.tmux.conf ~/
 cp -v $RPATH/CONFIGS/tmux.conf.local ~/.tmux.conf.local
 
 # nvim
-wget -q --show-progress https://github.com/neovim/neovim/releases/download/stable/nvim-linux64.tar.gz -O /tmp/nvim-linux64.tar.gz
+wget -q --show-progress https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz -O /tmp/nvim-linux64.tar.gz
 sudo tar xzvf /tmp/nvim-linux64.tar.gz --directory=/opt
-sudo ln -s /opt/nvim-linux64/bin/nvim /usr/bin/nvim
+sudo ln -s /opt/nvim-linux-x86_64/bin/nvim /usr/bin/nvim
 sudo rm -f /opt/nvim-linux64.tar.gz
 
 # Instalar terminal kitty
@@ -110,8 +110,7 @@ cat $RPATH/kitty-installer.sh | sh /dev/stdin
 # ~/.local/kitty.app/bin/kitty
 
 # batcat
-wget -q --show-progress https://github.com/sharkdp/bat/releases/download/v0.24.0/bat_0.24.0_amd64.deb -O /tmp/bat.deb
-sudo dpkg -i /tmp/bat.deb
+sudo apt install bat
 
 # Clonar repositorios de polybar & picom
 mkdir ~/github
@@ -140,7 +139,7 @@ ninja -C build
 sudo ninja -C build install
 
 # Cambiar zona horaria, para listar zonas horarias ejecutar: timedatectl list-timezones
-sudo timedatectl set-timezone "Europe/Madrid"
+sudo timedatectl set-timezone "America/Argentina/Buenos_Aires"
 
 mkdir ~/screenshots
 # Copiar todos los archivos de configuración

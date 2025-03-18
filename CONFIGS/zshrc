@@ -105,10 +105,12 @@ source $ZSH/oh-my-zsh.sh
 #
 # Example aliases
 alias ls='lsd'
-alias cat='bat'
 alias vi='nvim'
 alias vim='nvim'
-alias catn='/usr/bin/cat'
+alias cat='/usr/bin/batcat'
+alias catn='/usr/bin/batcat --style=plain'
+alias catnp='/usr/bin/batcat --style=plain --paging=never'
+alias catm='/usr/bin/cat'
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
