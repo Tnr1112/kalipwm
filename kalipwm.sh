@@ -158,16 +158,16 @@ sudo apt install -y flameshot
 sudo timedatectl set-timezone "America/Argentina/Buenos_Aires"
 
 # Cambiar el layout del teclado
-sudo echo '# KEYBOARD CONFIGURATION FILE
+sudo bash -c 'echo "# KEYBOARD CONFIGURATION FILE
 
 # Consult the keyboard(5) manual page.
 
-XKBMODEL="pc105"
-XKBLAYOUT="latam"
-XKBVARIANT=""
-XKBOPTIONS=""
+XKBMODEL=\"pc105\"
+XKBLAYOUT=\"latam\"
+XKBVARIANT=\"\"
+XKBOPTIONS=\"\"
 
-BACKSPACE="guess"' > sudo /etc/default/keyboard
+BACKSPACE=\"guess\"" > /etc/default/keyboard'
 
 # Copiar todos los archivos de configuración
 cp -rv $RPATH/CONFIGS/config/* ~/.config/
