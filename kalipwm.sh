@@ -126,10 +126,10 @@ make -j$(nproc)
 sudo make install
 
 # Instalar temas de polybar
-git clone --depth=1 https://github.com/adi1090x/polybar-themes.git ~/github/polybar-themes
-chmod +x ~/github/polybar-themes/setup.sh
-cd ~/github/polybar-themes
-echo 1 | ./setup.sh
+# git clone --depth=1 https://github.com/adi1090x/polybar-themes.git ~/github/polybar-themes
+# chmod +x ~/github/polybar-themes/setup.sh
+# cd ~/github/polybar-themes
+# echo 1 | ./setup.sh
 
 # Instalar picom
 cd ~/github/picom
@@ -137,6 +137,19 @@ git submodule update --init --recursive
 meson --buildtype=release . build
 ninja -C build
 sudo ninja -C build install
+
+# Dependencias para clipmenu
+sudo apt install -y libxfixes-dev
+
+# clipmenu
+git clone https://github.com/cdown/clipmenu
+cd clipmenu
+sudo make install
+cd ..
+rm -rf clipmenu
+
+#ghidra
+sudo apt install -y ghidra
 
 # Cambiar zona horaria, para listar zonas horarias ejecutar: timedatectl list-timezones
 sudo timedatectl set-timezone "America/Argentina/Buenos_Aires"
@@ -146,9 +159,7 @@ mkdir ~/screenshots
 cp -rv $RPATH/CONFIGS/config/* ~/.config/
 
 # Copiar scripts
-cp -rv $RPATH/SCRIPTS/* ~/.config/polybar/forest/scripts/
-sudo ln -s ~/.config/polybar/forest/scripts/target.sh /usr/bin/target
-sudo ln -s ~/.config/polybar/forest/scripts/screenshot.sh /usr/bin/screenshot
+cp -rv $RPATH/SCRIPTS/* ~/.config/scripts/
 
 # Copiar wallpapers
 mkdir ~/Wallpapers/
@@ -158,8 +169,7 @@ cp -rv $RPATH/WALLPAPERS/* ~/Wallpapers/
 chmod +x ~/.config/bspwm/bspwmrc
 chmod +x ~/.config/bspwm/scripts/bspwm_resize
 chmod +x ~/.config/polybar/launch.sh
-chmod +x ~/.config/polybar/forest/scripts/target.sh
-chmod +x ~/.config/polybar/forest/scripts/screenshot.sh
+chmod +x ~/.config/scripts/*
 
 # Seleccionar tema de rofi
 # rofi-theme-selector

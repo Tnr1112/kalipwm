@@ -1,8 +1,5 @@
 #! /bin/sh
 
-wmname LG3D &
-vmware-user-suid-wrapper &
-
 pgrep -x sxhkd > /dev/null || sxhkd &
 
 bspc monitor -d I II III IV V VI VII VIII IX X
@@ -19,18 +16,12 @@ bspc rule -a Chromium desktop='^2'
 bspc rule -a mplayer2 state=floating
 bspc rule -a Kupfer.py focus=on
 bspc rule -a Screenkey manage=off
-
-# WALLPAPER
-feh --bg-fill ~/Wallpapers/wallpaper.*
-
-# POLYBAR
-~/.config/polybar/launch.sh --forest
-
-# CUSTOM
-bspc config focus_follows_pointer true
-
-# PICOM
+vmware-user-suid-wrapper &
+#bspc config pointer_motion_interval 100
+/usr/bin/feh --bg-fill /home/tnr1112/Wallpapers/wallpapersden.com_huawei-4k-stock-abstract_2560x1440.jpg
+~/.config/polybar/launch.sh --custom
 picom &
-bspc config border_width 0
-
-xsetroot -cursor_name left_ptr &
+#bspc config border_width 0
+wmname LG3D &
+flameshot &
+clipmenud &
