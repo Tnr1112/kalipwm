@@ -48,6 +48,9 @@ module-margin-right = 2
 font-0 = ypn envypn:size=10;2
 font-1 = siji:pixelsize=10;2
 font-2 = termsynu:size=8;2
+font-3 = "Hack Nerd Font:size=12;4"
+font-4 = "Hack Nerd Font:size=12;3"
+font-5 = "feather:size=12;3"
 
 modules-left = bspwm i3
 ;modules-center = mpd

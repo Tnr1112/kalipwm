@@ -9,7 +9,7 @@ super + Return
 # program launcher
 super + d
 #	/usr/bin/rofi -show drun
-	/usr/bin/rofi -show drun -theme /home/tnr1112/.config/rofi/launchers/type-7/style-3.rasi
+	/usr/bin/rofi -show drun -theme ~/.config/rofi/launchers/type-7/style-3.rasi
 
 # make sxhkd reload its configuration files:
 super + Escape
@@ -123,7 +123,7 @@ super + shift + {Left,Down,Up,Right}
 
 # Custom Resize
 alt + super + {Left,Down,Up,Right}
-	/home/tnr1112/.config/bspwm/scripts/bspwm_resize {west,south,north,east}
+	~/.config/bspwm/scripts/bspwm_resize {west,south,north,east}
 
 ########################
 # Custom Launchers App #

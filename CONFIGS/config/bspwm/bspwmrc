@@ -18,7 +18,7 @@ bspc rule -a Kupfer.py focus=on
 bspc rule -a Screenkey manage=off
 vmware-user-suid-wrapper &
 #bspc config pointer_motion_interval 100
-/usr/bin/feh --bg-fill /home/tnr1112/Wallpapers/wallpapersden.com_huawei-4k-stock-abstract_2560x1440.jpg
+/usr/bin/feh --bg-fill ~/Wallpapers/wallpapersden.com_huawei-4k-stock-abstract_2560x1440.jpg
 ~/.config/polybar/launch.sh --custom
 picom &
 #bspc config border_width 0

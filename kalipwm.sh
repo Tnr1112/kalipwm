@@ -148,8 +148,11 @@ sudo make install
 cd ..
 rm -rf clipmenu
 
-#ghidra
+# ghidra
 sudo apt install -y ghidra
+
+# flameshot
+sudo apt install -y flameshot
 
 # Cambiar zona horaria, para listar zonas horarias ejecutar: timedatectl list-timezones
 sudo timedatectl set-timezone "America/Argentina/Buenos_Aires"
@@ -159,6 +162,7 @@ mkdir ~/screenshots
 cp -rv $RPATH/CONFIGS/config/* ~/.config/
 
 # Copiar scripts
+mkdir -p ~/.config/scripts
 cp -rv $RPATH/SCRIPTS/* ~/.config/scripts/
 
 # Copiar wallpapers
