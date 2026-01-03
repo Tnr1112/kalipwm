@@ -5,6 +5,9 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+# Initialize zoxide
+eval "$(zoxide init zsh)"
+
 # Fix the Java Problem
 export _JAVA_AWT_WM_NONREPARENTING=1
 
@@ -37,6 +40,12 @@ function rmk(){
 
 function mkt(){
         mkdir {discovery,content,exploits,scripts}
+}
+
+# Custom clear with animation
+function c() {
+    for i in {1..50}; do echo ""; sleep 0.002; done
+    clear
 }
 
 ########### END OF CUSTOM SCRIPTS

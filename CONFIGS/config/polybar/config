@@ -1,4 +1,3 @@
-
 ; this config is probably written for an unreleased version
 ; so it may or may not work for you
 ;
@@ -54,7 +53,7 @@ font-5 = "feather:size=12;3"
 
 modules-left = bspwm i3
 ;modules-center = mpd
-modules-center = xwindow
+modules-center = mediaplayer
 modules-right = xkeyboard xbacklight volume wifi battery memory cpu date
 
 tray-position = right
@@ -439,5 +438,13 @@ label-maxlen = 75
 type = internal/counter
 format = <counter>
 interval = 0.1
+
+[module/mediaplayer]
+type = custom/script
+exec = ~/.config/scripts/player_info.sh
+interval = 1
+click-left = playerctl play-pause
+scroll-up = playerctl next
+scroll-down = playerctl previous
 
 ; vim:ft=dosini

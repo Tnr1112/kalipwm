@@ -31,6 +31,24 @@ sleep 3
 echo -e "\n[*] Configurando la instalación..\n"
 sleep 4
 
+# Función de reintento para comandos git
+function git_retry() {
+    local max_retries=3
+    local count=0
+    
+    until "$@"; do
+        exit_code=$?
+        count=$((count + 1))
+        if [ $count -lt $max_retries ]; then
+            echo "Command failed: $@. Retrying $count/$max_retries..."
+            sleep 2
+        else
+            echo "Command failed after $max_retries attempts: $@"
+            return $exit_code
+        fi
+    done
+}
+
 RPATH=`pwd`
 
 # Actualizar paquetes
@@ -38,7 +56,8 @@ sudo apt update
 
 # Instalar paquetes
 sudo apt install -y git bspwm vim feh scrot scrub zsh rofi xclip xsel locate wmname acpi sxhkd \
-    imagemagick ranger kitty tmux python3-pip font-manager lsd bpython open-vm-tools-desktop open-vm-tools fastfetch # (neofetch obsoleto)
+    imagemagick ranger kitty tmux python3-pip font-manager lsd bpython open-vm-tools-desktop open-vm-tools fastfetch \
+    playerctl curl zoxide btop cava cargo libgtk-3-dev libgdk-pixbuf2.0-dev libcairo2-dev libglib2.0-dev libpango1.0-dev # (neofetch obsoleto)
 
 # Instalar dependencias del entorno
 sudo apt install -y build-essential libxcb-util0-dev libxcb-ewmh-dev libxcb-randr0-dev \
@@ -54,7 +73,7 @@ sudo apt install -y cmake cmake-data pkg-config python3-sphinx libcairo2-dev lib
 sudo apt install -y meson libxext-dev libxcb1-dev libxcb-damage0-dev libxcb-xfixes0-dev libxcb-shape0-dev \
     libxcb-render-util0-dev libxcb-render0-dev libxcb-composite0-dev libxcb-image0-dev libxcb-present-dev \
     libxcb-xinerama0-dev libpixman-1-dev libdbus-1-dev libconfig-dev libgl1-mesa-dev libpcre2-dev libevdev-dev \
-    uthash-dev libev-dev libx11-xcb-dev libxcb-glx0-dev libpcre3 libpcre3-dev
+    uthash-dev libev-dev libx11-xcb-dev libxcb-glx0-dev libpcre3 libpcre3-dev libepoxy-dev
 
 # Instalar Hack Nerd Font
 mkdir -p /tmp/fonts
@@ -78,24 +97,24 @@ rm -rf ~/.oh-my-zsh
 yes | sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
 # Instalar powerlevel10k
-git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+git_retry git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
 rm -f ~/.p10k.zsh
 cp -v $RPATH/CONFIGS/p10k.zsh ~/.p10k.zsh
 
 # Instalar plugins de zsh
-git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+git_retry git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+git_retry git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 rm -f ~/.zshrc
 # ¿Instalar zsh-autocomplete?
 cp -v $RPATH/CONFIGS/zshrc ~/.zshrc
 
 # Instalar fzf
-git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+git_retry git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 yes | ~/.fzf/install
 
 # .tmux
 rm -rf ~/.tmux
-git clone https://github.com/gpakosz/.tmux.git ~/.tmux
+git_retry git clone https://github.com/gpakosz/.tmux.git ~/.tmux
 ln -s -f ~/.tmux/.tmux.conf ~/
 cp -v $RPATH/CONFIGS/tmux.conf.local ~/.tmux.conf.local
 
@@ -114,8 +133,9 @@ sudo apt install bat
 
 # Clonar repositorios de polybar & picom
 mkdir ~/github
-git clone --recursive https://github.com/polybar/polybar ~/github/polybar
-git clone https://github.com/ibhagwan/picom.git ~/github/picom
+git_retry git clone --recursive https://github.com/polybar/polybar ~/github/polybar
+# Usando fork FT-Labs para animaciones
+git_retry git clone https://github.com/FT-Labs/picom.git ~/github/picom
 
 # Instalar polybar
 cd ~/github/polybar
@@ -142,7 +162,7 @@ sudo ninja -C build install
 sudo apt install -y libxfixes-dev
 
 # clipmenu
-git clone https://github.com/cdown/clipmenu
+git_retry git clone https://github.com/cdown/clipmenu
 cd clipmenu
 sudo make install
 cd ..
