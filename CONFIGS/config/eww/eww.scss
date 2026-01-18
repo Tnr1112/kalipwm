@@ -1,0 +1,299 @@
+/* ╔══════════════════════════════════════════════════════════════════════════╗
+   ║                         EWW STYLES                                       ║
+   ║                  Estilos con animaciones                                 ║
+   ╚══════════════════════════════════════════════════════════════════════════╝ */
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   VARIABLES DE COLOR (personalizar según tu tema)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+* {
+    --bg: #1e1e2e;
+    --bg-alt: #313244;
+    --fg: #cdd6f4;
+    --fg-alt: #a6adc8;
+    --accent: #89b4fa;
+    --accent-alt: #74c7ec;
+    --red: #f38ba8;
+    --green: #a6e3a1;
+    --yellow: #f9e2af;
+    --blue: #89b4fa;
+    --magenta: #cba6f7;
+    --cyan: #94e2d5;
+    
+    font-family: "JetBrainsMono Nerd Font", "Hack Nerd Font", monospace;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ANIMACIONES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes slideIn {
+    from { transform: translateX(-100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes glow {
+    0%, 100% { box-shadow: 0 0 5px var(--accent); }
+    50% { box-shadow: 0 0 20px var(--accent), 0 0 30px var(--accent-alt); }
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SIDEBAR
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.sidebar {
+    background: var(--bg);
+    border-radius: 0 20px 20px 0;
+    padding: 20px;
+    animation: slideIn 0.3s ease-out;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CLOCK WIDGET
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.clock-box {
+    background: var(--bg-alt);
+    border-radius: 15px;
+    padding: 20px;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.time {
+    font-size: 48px;
+    font-weight: bold;
+}
+
+.hour, .min {
+    color: var(--accent);
+    transition: all 0.3s ease;
+}
+
+.hour:hover, .min:hover {
+    color: var(--accent-alt);
+    text-shadow: 0 0 10px var(--accent);
+}
+
+.separator {
+    color: var(--fg-alt);
+    animation: pulse 1s infinite;
+}
+
+.date {
+    color: var(--fg-alt);
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MUSIC PLAYER
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.music-box {
+    background: var(--bg-alt);
+    border-radius: 15px;
+    padding: 20px;
+    animation: fadeIn 0.5s ease-out 0.1s backwards;
+}
+
+.album-art-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.album-art {
+    min-width: 150px;
+    min-height: 150px;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+    background-color: var(--bg);
+    border: 3px solid var(--accent);
+    transition: all 0.3s ease;
+}
+
+.album-art.spinning {
+    animation: spin 8s linear infinite;
+    border-color: var(--green);
+    box-shadow: 0 0 20px var(--green);
+}
+
+.album-art:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 25px var(--accent);
+}
+
+.music-title {
+    color: var(--fg);
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.music-artist {
+    color: var(--fg-alt);
+    font-size: 12px;
+    text-align: center;
+}
+
+.music-progress {
+    margin: 10px 0;
+}
+
+.music-progress trough {
+    background: var(--bg);
+    border-radius: 10px;
+    min-height: 8px;
+}
+
+.music-progress slider {
+    background: var(--accent);
+    border-radius: 50%;
+    min-width: 15px;
+    min-height: 15px;
+    transition: all 0.2s ease;
+}
+
+.music-progress slider:hover {
+    background: var(--accent-alt);
+    transform: scale(1.2);
+}
+
+.music-progress highlight {
+    background: linear-gradient(90deg, var(--accent), var(--accent-alt));
+    border-radius: 10px;
+}
+
+.music-controls {
+    margin-top: 10px;
+}
+
+.ctrl-btn {
+    background: var(--bg);
+    color: var(--fg);
+    border: none;
+    border-radius: 50%;
+    min-width: 40px;
+    min-height: 40px;
+    font-size: 18px;
+    transition: all 0.2s ease;
+}
+
+.ctrl-btn:hover {
+    background: var(--accent);
+    color: var(--bg);
+    transform: scale(1.1);
+}
+
+.play-btn {
+    min-width: 50px;
+    min-height: 50px;
+    font-size: 22px;
+    background: var(--accent);
+    color: var(--bg);
+    animation: glow 2s infinite;
+}
+
+.play-btn:hover {
+    background: var(--accent-alt);
+    animation: none;
+    transform: scale(1.15);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SYSTEM STATS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.system-box {
+    background: var(--bg-alt);
+    border-radius: 15px;
+    padding: 20px;
+    animation: fadeIn 0.5s ease-out 0.2s backwards;
+}
+
+.sys-icon {
+    color: var(--accent);
+    font-size: 24px;
+    min-width: 35px;
+    transition: all 0.3s ease;
+}
+
+.sys-icon:hover {
+    transform: scale(1.2);
+    animation: bounce 0.5s ease;
+}
+
+.sys-label {
+    color: var(--fg-alt);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.sys-bar {
+    min-height: 8px;
+    border-radius: 5px;
+    margin-top: 3px;
+}
+
+.sys-bar trough {
+    background: var(--bg);
+    border-radius: 5px;
+    min-height: 8px;
+}
+
+.cpu-bar highlight {
+    background: linear-gradient(90deg, var(--green), var(--yellow));
+    border-radius: 5px;
+    transition: all 0.5s ease;
+}
+
+.mem-bar highlight {
+    background: linear-gradient(90deg, var(--blue), var(--magenta));
+    border-radius: 5px;
+    transition: all 0.5s ease;
+}
+
+.vol-bar slider {
+    background: var(--cyan);
+    border-radius: 50%;
+    min-width: 12px;
+    min-height: 12px;
+}
+
+.vol-bar highlight {
+    background: linear-gradient(90deg, var(--cyan), var(--green));
+    border-radius: 5px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   EFECTOS HOVER GLOBALES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.music-box:hover,
+.system-box:hover,
+.clock-box:hover {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}

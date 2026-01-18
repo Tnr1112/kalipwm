@@ -148,3 +148,19 @@ super + shift + b
 # Clipboard history
 super + v
 	clipmenu | xdotool key Shift+Insert
+
+########################
+# EWW Widgets          #
+########################
+
+# Toggle EWW sidebar (música + sistema)
+super + shift + w
+	~/.config/scripts/eww-toggle.sh
+
+# Abrir solo el widget de música
+super + shift + m
+	eww open --toggle music
+
+# Abrir estadísticas del sistema
+super + shift + x
+	eww open --toggle stats

@@ -1,0 +1,168 @@
+; ╔══════════════════════════════════════════════════════════════════════════╗
+; ║                         EWW CONFIGURATION                                 ║
+; ║                    Widget de música y sistema                            ║
+; ╚══════════════════════════════════════════════════════════════════════════╝
+
+; ═══════════════════════════════════════════════════════════════════════════
+; VARIABLES
+; ═══════════════════════════════════════════════════════════════════════════
+
+; Información de música (usando playerctl)
+(defpoll music-status :interval "1s"
+  "playerctl status 2>/dev/null || echo 'Stopped'")
+
+(defpoll music-title :interval "1s"
+  "playerctl metadata title 2>/dev/null || echo 'No music'")
+
+(defpoll music-artist :interval "1s"
+  "playerctl metadata artist 2>/dev/null || echo 'Unknown'")
+
+(defpoll music-art :interval "2s"
+  "playerctl metadata mpris:artUrl 2>/dev/null | sed 's|file://||' || echo ''")
+
+(defpoll music-position :interval "1s"
+  "playerctl position 2>/dev/null | cut -d. -f1 || echo '0'")
+
+(defpoll music-length :interval "2s"
+  "playerctl metadata mpris:length 2>/dev/null | awk '{print int($1/1000000)}' || echo '100'")
+
+; Información del sistema
+(defpoll cpu-usage :interval "2s"
+  "top -bn1 | grep 'Cpu(s)' | awk '{print int($2)}'")
+
+(defpoll mem-usage :interval "2s"
+  "free | grep Mem | awk '{print int($3/$2 * 100)}'")
+
+(defpoll volume :interval "1s"
+  "pactl get-sink-volume @DEFAULT_SINK@ | grep -oP '\\d+%' | head -1 | tr -d '%'")
+
+(defpoll time-hour :interval "1s"
+  "date '+%H'")
+
+(defpoll time-min :interval "1s"
+  "date '+%M'")
+
+(defpoll date-day :interval "60s"
+  "date '+%d'")
+
+(defpoll date-month :interval "60s"
+  "date '+%b'")
+
+; ═══════════════════════════════════════════════════════════════════════════
+; WIDGETS
+; ═══════════════════════════════════════════════════════════════════════════
+
+; Widget de música
+(defwidget music-player []
+  (box :class "music-box" :orientation "v" :space-evenly false :spacing 10
+    ; Carátula del álbum con animación
+    (box :class "album-art-container"
+      (box :class "album-art ${music-status == 'Playing' ? 'spinning' : ''}"
+           :style "background-image: url('${music-art}');"))
+    
+    ; Información de la canción
+    (box :orientation "v" :space-evenly false :spacing 5
+      (label :class "music-title" :text music-title :limit-width 25)
+      (label :class "music-artist" :text music-artist :limit-width 20))
+    
+    ; Barra de progreso
+    (scale :class "music-progress"
+           :min 0
+           :max music-length
+           :value music-position
+           :onchange "playerctl position {}")
+    
+    ; Controles
+    (box :class "music-controls" :orientation "h" :halign "center" :spacing 20
+      (button :class "ctrl-btn" :onclick "playerctl previous" "󰒮")
+      (button :class "ctrl-btn play-btn" 
+              :onclick "playerctl play-pause"
+              {music-status == "Playing" ? "󰏤" : "󰐊"})
+      (button :class "ctrl-btn" :onclick "playerctl next" "󰒭"))))
+
+; Widget de sistema
+(defwidget system-stats []
+  (box :class "system-box" :orientation "v" :space-evenly false :spacing 15
+    ; CPU
+    (box :orientation "h" :space-evenly false :spacing 10
+      (label :class "sys-icon" :text "󰻠")
+      (box :orientation "v" :space-evenly false
+        (label :class "sys-label" :text "CPU")
+        (progress :class "sys-bar cpu-bar" :value cpu-usage)))
+    
+    ; RAM
+    (box :orientation "h" :space-evenly false :spacing 10
+      (label :class "sys-icon" :text "󰍛")
+      (box :orientation "v" :space-evenly false
+        (label :class "sys-label" :text "RAM")
+        (progress :class "sys-bar mem-bar" :value mem-usage)))
+    
+    ; Volumen
+    (box :orientation "h" :space-evenly false :spacing 10
+      (label :class "sys-icon" :text {volume > 50 ? "󰕾" : volume > 0 ? "󰖀" : "󰝟"})
+      (box :orientation "v" :space-evenly false
+        (label :class "sys-label" :text "VOL")
+        (scale :class "sys-bar vol-bar" 
+               :min 0 :max 100 :value volume
+               :onchange "pactl set-sink-volume @DEFAULT_SINK@ {}%")))))
+
+; Widget de reloj
+(defwidget clock []
+  (box :class "clock-box" :orientation "v" :space-evenly false
+    (box :class "time" :orientation "h" :halign "center"
+      (label :class "hour" :text time-hour)
+      (label :class "separator" :text ":")
+      (label :class "min" :text time-min))
+    (box :class "date" :orientation "h" :halign "center" :spacing 5
+      (label :class "day" :text date-day)
+      (label :class "month" :text date-month))))
+
+; Widget principal combinado
+(defwidget sidebar []
+  (box :class "sidebar" :orientation "v" :space-evenly false :spacing 20
+    (clock)
+    (music-player)
+    (system-stats)))
+
+; ═══════════════════════════════════════════════════════════════════════════
+; WINDOWS
+; ═══════════════════════════════════════════════════════════════════════════
+
+; Ventana del sidebar
+(defwindow sidebar
+  :monitor 0
+  :geometry (geometry :x "10px"
+                      :y "0%"
+                      :width "280px"
+                      :height "90%"
+                      :anchor "center left")
+  :stacking "fg"
+  :exclusive false
+  :focusable false
+  (sidebar))
+
+; Ventana del reproductor de música (standalone)
+(defwindow music
+  :monitor 0
+  :geometry (geometry :x "50%"
+                      :y "50%"
+                      :width "320px"
+                      :height "400px"
+                      :anchor "center center")
+  :stacking "overlay"
+  :exclusive false
+  :focusable true
+  (music-player))
+
+; Ventana de estadísticas del sistema
+(defwindow stats
+  :monitor 0
+  :geometry (geometry :x "-10px"
+                      :y "10px"
+                      :width "200px"
+                      :height "200px"
+                      :anchor "top right")
+  :stacking "fg"
+  :exclusive false
+  :focusable false
+  (system-stats))

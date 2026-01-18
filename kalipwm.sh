@@ -112,10 +112,10 @@ cat $RPATH/kitty-installer.sh | sh /dev/stdin
 # batcat
 sudo apt install bat
 
-# Clonar repositorios de polybar & picom
+# Clonar repositorios de polybar & picom (oficial con animaciones v12+)
 mkdir ~/github
 git clone --recursive https://github.com/polybar/polybar ~/github/polybar
-git clone https://github.com/ibhagwan/picom.git ~/github/picom
+git clone https://github.com/yshui/picom.git ~/github/picom
 
 # Instalar polybar
 cd ~/github/polybar
@@ -131,12 +131,28 @@ sudo make install
 # cd ~/github/polybar-themes
 # echo 1 | ./setup.sh
 
-# Instalar picom
+# Instalar picom oficial (v12+ con animaciones nativas)
 cd ~/github/picom
 git submodule update --init --recursive
-meson --buildtype=release . build
+meson setup --buildtype=release build
 ninja -C build
 sudo ninja -C build install
+
+# Instalar cava (visualizador de audio)
+sudo apt install -y cava
+
+# Instalar dependencias de eww
+sudo apt install -y libgtk-3-dev libpango1.0-dev libgdk-pixbuf-2.0-dev libcairo2-dev libglib2.0-dev
+
+# Instalar Rust (necesario para eww)
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+source "$HOME/.cargo/env"
+
+# Instalar eww (ElKowar's Wacky Widgets)
+git clone https://github.com/elkowar/eww ~/github/eww
+cd ~/github/eww
+cargo build --release --no-default-features --features x11
+sudo cp target/release/eww /usr/local/bin/
 
 # Dependencias para clipmenu
 sudo apt install -y libxfixes-dev
@@ -185,6 +201,22 @@ chmod +x ~/.config/bspwm/bspwmrc
 chmod +x ~/.config/bspwm/scripts/bspwm_resize
 chmod +x ~/.config/polybar/launch.sh
 chmod +x ~/.config/scripts/*
+
+# Instalar playerctl para control de música (necesario para eww)
+sudo apt install -y playerctl
+
+# Crear script para lanzar eww
+cat > ~/.config/scripts/eww-toggle.sh << 'EOF'
+#!/bin/bash
+# Toggle sidebar de eww
+STATE=$(eww state | grep -c "sidebar")
+if eww windows | grep -q "\*sidebar"; then
+    eww close sidebar
+else
+    eww open sidebar
+fi
+EOF
+chmod +x ~/.config/scripts/eww-toggle.sh
 
 # Seleccionar tema de rofi
 # rofi-theme-selector
