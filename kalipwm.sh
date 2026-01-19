@@ -97,8 +97,8 @@ safe_install() {
         fi
         ((retry++))
         if [ $retry -lt $max_retries ]; then
-            warning "Reintentando en 3 segundos... ($retry/$max_retries)"
-            sleep 3
+            warning "Reintentando... ($retry/$max_retries)"
+            sleep 1
         fi
     done
     error "Falló la instalación de: $packages (ver log: $LOG_FILE)"
@@ -106,25 +106,37 @@ safe_install() {
 }
 
 # Clonar repositorio git con reintentos
+# Uso: safe_git_clone <url> <dest> [--full]
+# --full: clonación completa (necesaria para submodules)
 safe_git_clone() {
     local url="$1"
     local dest="$2"
+    local full_clone=false
     local max_retries=3
     local retry=0
+    
+    # Detectar si necesita clone completo
+    [[ "$3" == "--full" ]] && full_clone=true
     
     # Si existe, eliminarlo primero
     [ -d "$dest" ] && rm -rf "$dest"
     
     while [ $retry -lt $max_retries ]; do
         echo -e "${DIM}  Intento $((retry+1))/$max_retries: git clone $url${RESET}"
-        if git clone --depth=1 "$url" "$dest" >> "$LOG_FILE" 2>&1; then
-            return 0
+        if $full_clone; then
+            if git clone "$url" "$dest" >> "$LOG_FILE" 2>&1; then
+                return 0
+            fi
+        else
+            if git clone --depth=1 "$url" "$dest" >> "$LOG_FILE" 2>&1; then
+                return 0
+            fi
         fi
         ((retry++))
         if [ $retry -lt $max_retries ]; then
-            warning "Reintentando clone en 3 segundos... ($retry/$max_retries)"
+            warning "Reintentando clone... ($retry/$max_retries)"
             rm -rf "$dest" 2>/dev/null
-            sleep 3
+            sleep 1
         fi
     done
     error "Falló git clone: $url"
@@ -145,9 +157,9 @@ safe_download() {
         fi
         ((retry++))
         if [ $retry -lt $max_retries ]; then
-            warning "Reintentando descarga en 3 segundos... ($retry/$max_retries)"
+            warning "Reintentando descarga... ($retry/$max_retries)"
             rm -f "$dest" 2>/dev/null
-            sleep 3
+            sleep 1
         fi
     done
     error "Falló descarga: $url"
@@ -168,8 +180,8 @@ safe_exec() {
         fi
         ((retry++))
         if [ $retry -lt $max_retries ]; then
-            warning "Reintentando en 2 segundos... ($retry/$max_retries)"
-            sleep 2
+            warning "Reintentando... ($retry/$max_retries)"
+            sleep 1
         fi
     done
     error "Falló: $description"
@@ -202,14 +214,11 @@ echo "
  :   :::   :   : :  : :: : :  :     :          :: :  : :     :      :    
 "
 echo -e "${RESET}"
-sleep 1
 success "Script de automatización de entorno de hacking profesional."
 info "@afsh4ck - Sígueme en: YouTube, Instagram, TikTok"
 info "Log de instalación: $LOG_FILE"
-sleep 2
 echo ""
 info "Configurando la instalación..."
-sleep 2
 
 RPATH=$(pwd)
 
@@ -247,17 +256,17 @@ start_step "Instalar requisitos de polybar"
 if safe_install cmake cmake-data pkg-config python3-sphinx libcairo2-dev libxcb1-dev libxcb-util0-dev \
     libxcb-randr0-dev libxcb-composite0-dev python3-xcbgen xcb-proto libxcb-image0-dev libxcb-ewmh-dev \
     libxcb-icccm4-dev libxcb-xkb-dev libxcb-xrm-dev libxcb-cursor-dev libasound2-dev libpulse-dev libjsoncpp-dev \
-    libmpdclient-dev libuv1-dev libnl-genl-3-dev; then
+    libmpdclient-dev libuv1-dev libnl-genl-3-dev libiw-dev libcurl4-openssl-dev; then
     finish_step
 else
     fail_step "Algunas dependencias de polybar no se instalaron"
 fi
 
 start_step "Instalar dependencias de picom"
-if safe_install meson libxext-dev libxcb1-dev libxcb-damage0-dev libxcb-xfixes0-dev libxcb-shape0-dev \
+if safe_install meson ninja-build libxext-dev libxcb1-dev libxcb-damage0-dev libxcb-xfixes0-dev libxcb-shape0-dev \
     libxcb-render-util0-dev libxcb-render0-dev libxcb-composite0-dev libxcb-image0-dev libxcb-present-dev \
     libxcb-xinerama0-dev libpixman-1-dev libdbus-1-dev libconfig-dev libgl1-mesa-dev libpcre2-dev libevdev-dev \
-    uthash-dev libev-dev libx11-xcb-dev libxcb-glx0-dev libpcre3 libpcre3-dev; then
+    uthash-dev libev-dev libx11-xcb-dev libxcb-glx0-dev libpcre3 libpcre3-dev libepoxy-dev; then
     finish_step
 else
     fail_step "Algunas dependencias de picom no se instalaron"
@@ -300,9 +309,9 @@ else
     fail_step "No se pudo instalar Oh My Zsh"
 fi
 
-# Instalar powerlevel10k
+# Instalar powerlevel10k (en ~/powerlevel10k como espera el zshrc)
 start_step "Instalar Powerlevel10k"
-if safe_git_clone "https://github.com/romkatv/powerlevel10k.git" "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"; then
+if safe_git_clone "https://github.com/romkatv/powerlevel10k.git" "$HOME/powerlevel10k"; then
     rm -f ~/.p10k.zsh
     cp -v $RPATH/CONFIGS/p10k.zsh ~/.p10k.zsh >> "$LOG_FILE" 2>&1
     finish_step
@@ -310,10 +319,22 @@ else
     fail_step "No se pudo instalar Powerlevel10k"
 fi
 
-# Instalar plugins de zsh
+# Instalar plugins de zsh (en /usr/share como espera el zshrc de Kali)
 start_step "Instalar plugins de ZSH"
-safe_git_clone "https://github.com/zsh-users/zsh-autosuggestions" "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"
-safe_git_clone "https://github.com/zsh-users/zsh-syntax-highlighting.git" "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting"
+# zsh-autosuggestions ya viene en Kali, pero verificamos
+if [ ! -f /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]; then
+    sudo mkdir -p /usr/share/zsh-autosuggestions
+    safe_git_clone "https://github.com/zsh-users/zsh-autosuggestions" "/tmp/zsh-autosuggestions"
+    sudo cp /tmp/zsh-autosuggestions/zsh-autosuggestions.zsh /usr/share/zsh-autosuggestions/
+    rm -rf /tmp/zsh-autosuggestions
+fi
+# zsh-syntax-highlighting ya viene en Kali, pero verificamos
+if [ ! -f /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
+    sudo mkdir -p /usr/share/zsh-syntax-highlighting
+    safe_git_clone "https://github.com/zsh-users/zsh-syntax-highlighting.git" "/tmp/zsh-syntax-highlighting"
+    sudo cp -r /tmp/zsh-syntax-highlighting/* /usr/share/zsh-syntax-highlighting/
+    rm -rf /tmp/zsh-syntax-highlighting
+fi
 finish_step
 
 rm -f ~/.zshrc
@@ -365,42 +386,52 @@ safe_install bat && finish_step || fail_step "No se pudo instalar bat"
 # Clonar repositorios de polybar & picom (oficial con animaciones v12+)
 start_step "Clonar repositorios (polybar, picom)"
 mkdir -p ~/github
-safe_git_clone "https://github.com/polybar/polybar" "$HOME/github/polybar" --recursive
-safe_git_clone "https://github.com/yshui/picom.git" "$HOME/github/picom"
+safe_git_clone "https://github.com/polybar/polybar" "$HOME/github/polybar" --full
+safe_git_clone "https://github.com/yshui/picom.git" "$HOME/github/picom" --full
 finish_step
 
 # Instalar polybar
 start_step "Compilar e instalar Polybar"
 cd ~/github/polybar
+git submodule update --init --recursive >> "$LOG_FILE" 2>&1
 mkdir -p build
 cd build
 if cmake .. >> "$LOG_FILE" 2>&1 && make -j$(nproc) >> "$LOG_FILE" 2>&1 && sudo make install >> "$LOG_FILE" 2>&1; then
     finish_step
 else
-    fail_step "Error compilando Polybar"
+    fail_step "Error compilando Polybar (ver: $LOG_FILE)"
 fi
 
 # Instalar picom oficial (v12+ con animaciones nativas)
 start_step "Compilar e instalar Picom (animaciones)"
 cd ~/github/picom
 git submodule update --init --recursive >> "$LOG_FILE" 2>&1
+# Limpiar build anterior si existe
+rm -rf build 2>/dev/null
 if meson setup --buildtype=release build >> "$LOG_FILE" 2>&1 && ninja -C build >> "$LOG_FILE" 2>&1 && sudo ninja -C build install >> "$LOG_FILE" 2>&1; then
     finish_step
 else
-    fail_step "Error compilando Picom"
+    fail_step "Error compilando Picom (ver: $LOG_FILE)"
 fi
 
 # Instalar cava (visualizador de audio)
 start_step "Instalar CAVA"
 safe_install cava && finish_step || fail_step "No se pudo instalar CAVA"
 
-# Instalar dependencias de eww
+# Instalar dependencias de eww (completas para X11)
 start_step "Instalar dependencias de EWW"
-safe_install libgtk-3-dev libpango1.0-dev libgdk-pixbuf-2.0-dev libcairo2-dev libglib2.0-dev && finish_step || fail_step "Dependencias de EWW incompletas"
+safe_install libgtk-3-dev libpango1.0-dev libgdk-pixbuf-2.0-dev libcairo2-dev libglib2.0-dev \
+    libgtk-layer-shell-dev libdbusmenu-gtk3-dev libdbusmenu-glib-dev librsvg2-dev libssl-dev \
+    pkg-config libgdk-pixbuf2.0-dev libatk1.0-dev gobject-introspection libgirepository1.0-dev && finish_step || fail_step "Dependencias de EWW incompletas"
 
 # Instalar Rust (necesario para eww)
 start_step "Instalar Rust"
-if curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y >> "$LOG_FILE" 2>&1; then
+if command_exists rustc; then
+    info "Rust ya está instalado, actualizando..."
+    source "$HOME/.cargo/env" 2>/dev/null
+    rustup update >> "$LOG_FILE" 2>&1
+    finish_step
+elif curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y >> "$LOG_FILE" 2>&1; then
     source "$HOME/.cargo/env"
     finish_step
 else
@@ -409,14 +440,23 @@ fi
 
 # Instalar eww (ElKowar's Wacky Widgets)
 start_step "Compilar e instalar EWW"
-if safe_git_clone "https://github.com/elkowar/eww" "$HOME/github/eww"; then
+if safe_git_clone "https://github.com/elkowar/eww" "$HOME/github/eww" --full; then
     cd ~/github/eww
-    source "$HOME/.cargo/env"
+    # Asegurar que cargo está disponible
+    source "$HOME/.cargo/env" 2>/dev/null || true
+    export PATH="$HOME/.cargo/bin:$PATH"
+    
+    # Compilar para X11
+    info "Compilando EWW (esto puede tardar varios minutos)..."
     if cargo build --release --no-default-features --features x11 >> "$LOG_FILE" 2>&1; then
         sudo cp target/release/eww /usr/local/bin/
+        chmod +x /usr/local/bin/eww
+        # Copiar configuración de EWW
+        mkdir -p ~/.config/eww
+        cp -r $RPATH/CONFIGS/config/eww/* ~/.config/eww/
         finish_step
     else
-        fail_step "Error compilando EWW"
+        fail_step "Error compilando EWW (ver: $LOG_FILE)"
     fi
 else
     fail_step "No se pudo clonar EWW"
