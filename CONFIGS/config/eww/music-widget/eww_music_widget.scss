@@ -3,6 +3,7 @@ $mw-primary-neon: #00ffff;
 $mw-secondary-neon: #ff00ff;
 $mw-text-color: #e0e0e0;
 
+.mw-widget,
 .music-widget {
   background-color: $mw-bg-color;
   border-radius: 10px;
@@ -12,6 +13,7 @@ $mw-text-color: #e0e0e0;
   box-shadow: 0 0 12px rgba($mw-primary-neon, 0.1);
 }
 
+.mw-cover,
 .cover-art {
   background-size: cover;
   background-position: center;
@@ -26,11 +28,13 @@ $mw-text-color: #e0e0e0;
   border: 1px solid rgba($mw-primary-neon, 0.3);
 }
 
+.mw-info,
 .music-info {
   padding: 5px 0;
   margin-right: 10px;
 }
 
+.mw-title,
 .song-title {
   font-size: 15px;
   font-weight: bold;
@@ -39,6 +43,7 @@ $mw-text-color: #e0e0e0;
   margin-bottom: 5px;
 }
 
+.mw-artist,
 .artist {
   font-size: 14px;
   opacity: 0.7;
@@ -46,11 +51,13 @@ $mw-text-color: #e0e0e0;
   margin-bottom: 5px;
 }
 
+.mw-controls,
 .controls {
   margin: 8px 0;
   font-size: 22px;
 }
 
+.mw-ctrl-btn,
 .controls button {
   background: none;
   border: none;
@@ -60,11 +67,13 @@ $mw-text-color: #e0e0e0;
   text-shadow: 0 2 6px rgba($mw-secondary-neon, 0.3);
 }
 
+.mw-ctrl-btn:hover,
 .controls button:hover {
   color: $mw-primary-neon;
   text-shadow: 0 0 10px rgba($mw-secondary-neon, 1);
 }
 
+.mw-position,
 .position {
   font-size: 12px;
   opacity: 0.75;
@@ -72,12 +81,14 @@ $mw-text-color: #e0e0e0;
   margin-bottom: 10px;
 }
 
+.mw-progress,
 .progress-bar {
   margin-left: 5px;
   padding: 0;
   border: none;
 }
 
+.mw-progress trough,
 .progress-bar trough {
   background-color: rgba($mw-primary-neon, 0.1);
   border-radius: 10px;
@@ -87,20 +98,24 @@ $mw-text-color: #e0e0e0;
   box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.4);
 }
 
+.mw-progress highlight,
 .progress-bar highlight {
   background-image: linear-gradient(to right, $mw-primary-neon, $mw-secondary-neon);
   border-radius: 10px;
   box-shadow: 0 0 3px $mw-primary-neon;
 }
 
+.mw-vol-box,
 .volume_bar {
   margin-left: 0;
 }
 
+.mw-vol-scale,
 .volume_bar scale {
   border: none;
 }
 
+.mw-vol-scale trough,
 .volume_bar scale trough {
   background-color: rgba($mw-primary-neon, 0.1);
   border-radius: 10px;
@@ -110,12 +125,14 @@ $mw-text-color: #e0e0e0;
   box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.4);
 }
 
+.mw-vol-scale trough highlight,
 .volume_bar scale trough highlight {
   background-image: linear-gradient(to top, $mw-primary-neon, $mw-secondary-neon);
   border-radius: 10px;
   box-shadow: 0 0 3px $mw-primary-neon;
 }
 
+.mw-vol-icon,
 .vol_icon {
   font-size: 24px;
   text-shadow: 0 0 1px $mw-primary-neon;
@@ -125,10 +142,12 @@ $mw-text-color: #e0e0e0;
   transition: all 0.2s ease-in-out;
 }
 
+.mw-vol-icon:hover,
 .vol_icon:hover {
   text-shadow: 0 0 10px rgba($mw-secondary-neon, 1);
 }
 
+.mw-cava,
 .cava-visualizer {
   margin-left: 5px;
   font-family: monospace;
