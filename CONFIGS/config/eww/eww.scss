@@ -69,6 +69,48 @@
     animation: slideIn 0.3s ease-out;
 }
 
+.music-topbar {
+    background: var(--bg);
+    border-radius: 16px;
+    padding: 10px 16px;
+}
+
+.music-topbar-icon {
+    color: var(--accent);
+    font-size: 22px;
+    min-width: 26px;
+}
+
+.music-topbar-title {
+    color: var(--fg);
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.music-topbar-artist {
+    color: var(--fg-alt);
+    font-size: 11px;
+}
+
+.cava-bars {
+    color: var(--accent-alt);
+    font-size: 12px;
+    letter-spacing: 1px;
+    min-width: 260px;
+}
+
+.music-topbar-controls .ctrl-btn {
+    min-width: 30px;
+    min-height: 30px;
+    font-size: 14px;
+}
+
+.music-topbar-controls .play-btn {
+    min-width: 34px;
+    min-height: 34px;
+    font-size: 16px;
+}
+
 /* ═══════════════════════════════════════════════════════════════════════════
    CLOCK WIDGET
    ═══════════════════════════════════════════════════════════════════════════ */

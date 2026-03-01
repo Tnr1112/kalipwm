@@ -48,6 +48,10 @@
 (defpoll date-month :interval "60s"
   "date '+%b'")
 
+; Visualizador estilo CAVA (stream continuo)
+(deflisten cava-bars
+  "bash ~/.config/scripts/eww_cava.sh")
+
 ; ═══════════════════════════════════════════════════════════════════════════
 ; WIDGETS
 ; ═══════════════════════════════════════════════════════════════════════════
@@ -124,6 +128,22 @@
     (music-player)
     (system-stats)))
 
+; Barra superior de música (auto-visible al reproducir)
+(defwidget music-topbar []
+  (revealer :transition "slideup" :duration "350ms" :reveal {music-status == "Playing"}
+    (box :class "music-topbar" :orientation "h" :space-evenly false :spacing 16
+      (label :class "music-topbar-icon" :text "󰎆")
+      (box :orientation "v" :space-evenly false
+        (label :class "music-topbar-title" :text music-title :limit-width 45)
+        (label :class "music-topbar-artist" :text music-artist :limit-width 45))
+      (label :class "cava-bars" :text cava-bars :limit-width 45)
+      (box :class "music-topbar-controls" :orientation "h" :spacing 10
+        (button :class "ctrl-btn" :onclick "playerctl previous" "󰒮")
+        (button :class "ctrl-btn play-btn"
+                :onclick "playerctl play-pause"
+                {music-status == "Playing" ? "󰏤" : "󰐊"})
+        (button :class "ctrl-btn" :onclick "playerctl next" "󰒭")))))
+
 ; ═══════════════════════════════════════════════════════════════════════════
 ; WINDOWS
 ; ═══════════════════════════════════════════════════════════════════════════
@@ -153,6 +173,19 @@
   :exclusive false
   :focusable true
   (music-player))
+
+; Barra superior de música
+(defwindow musicbar
+  :monitor 0
+  :geometry (geometry :x "0%"
+                      :y "10px"
+                      :width "780px"
+                      :height "90px"
+                      :anchor "top center")
+  :stacking "fg"
+  :exclusive false
+  :focusable false
+  (music-topbar))
 
 ; Ventana de estadísticas del sistema
 (defwindow stats
