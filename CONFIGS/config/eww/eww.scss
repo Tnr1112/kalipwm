@@ -1,11 +1,12 @@
-/* ╔══════════════════════════════════════════════════════════════════════════╗
-   ║                         EWW STYLES                                       ║
-   ║                  Estilos con animaciones                                 ║
-   ╚══════════════════════════════════════════════════════════════════════════╝ */
+/* 
+                            EWW STYLES                                       
+                     Estilos con animaciones                                 
+    */
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   VARIABLES DE COLOR (personalizar según tu tema)
-   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* 
+   VARIABLES DE COLOR (personalizar segun tu tema)
+    */
 
 * {
     --bg: #1e1e2e;
@@ -24,9 +25,9 @@
     font-family: "JetBrainsMono Nerd Font", "Hack Nerd Font", monospace;
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
+/* 
    ANIMACIONES
-   ═══════════════════════════════════════════════════════════════════════════ */
+    */
 
 @keyframes pulse {
     0%, 100% { opacity: 1; }
@@ -58,9 +59,9 @@
     50% { transform: translateY(-5px); }
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
+/* 
    SIDEBAR
-   ═══════════════════════════════════════════════════════════════════════════ */
+    */
 
 .sidebar {
     background: var(--bg);
@@ -111,9 +112,9 @@
     font-size: 16px;
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
+/* 
    CLOCK WIDGET
-   ═══════════════════════════════════════════════════════════════════════════ */
+    */
 
 .clock-box {
     background: var(--bg-alt);
@@ -148,9 +149,9 @@
     margin-top: 5px;
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
+/* 
    MUSIC PLAYER
-   ═══════════════════════════════════════════════════════════════════════════ */
+    */
 
 .music-box {
     background: var(--bg-alt);
@@ -264,9 +265,9 @@
     transform: scale(1.15);
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
+/* 
    SYSTEM STATS
-   ═══════════════════════════════════════════════════════════════════════════ */
+    */
 
 
 .stats-card {
@@ -372,9 +373,9 @@
     border-radius: 5px;
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
+/* 
    EFECTOS HOVER GLOBALES
-   ═══════════════════════════════════════════════════════════════════════════ */
+    */
 
 .music-box:hover,
 .stats-card:hover,
@@ -382,137 +383,4 @@
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   MUSIC WIDGET (abod8639)
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-.mw-widget {
-    background-color: rgba(10, 5, 30, 0.9);
-    border-radius: 10px;
-    padding: 10px;
-    color: #e0e0e0;
-    border: 1px solid #00ffff;
-    box-shadow: 0 0 12px rgba(0, 255, 255, 0.18);
-}
-
-.mw-cover {
-    background-size: cover;
-    background-position: center;
-    min-width: 155px;
-    min-height: 125px;
-    border-radius: 5px;
-    margin: 5px 8px 5px 5px;
-    border: 1px solid rgba(0, 255, 255, 0.35);
-}
-
-.mw-info {
-    padding: 5px 0;
-    margin-right: 8px;
-}
-
-.mw-title {
-    font-size: 15px;
-    font-weight: bold;
-    color: #ff00ff;
-    text-shadow: 0 0 1px rgba(255, 0, 255, 0.4);
-    margin-bottom: 4px;
-}
-
-.mw-artist {
-    font-size: 14px;
-    opacity: 0.75;
-    color: #00ffff;
-    margin-bottom: 4px;
-}
-
-.mw-controls {
-    margin: 6px 0;
-    font-size: 22px;
-}
-
-.mw-ctrl-btn {
-    background: none;
-    border: none;
-    color: #ff00ff;
-    padding: 0 10px;
-    min-width: 32px;
-    min-height: 32px;
-    transition: all 0.2s ease-in-out;
-}
-
-.mw-ctrl-btn:hover {
-    color: #00ffff;
-    text-shadow: 0 0 10px rgba(255, 0, 255, 1);
-}
-
-.mw-position {
-    font-size: 12px;
-    opacity: 0.85;
-    color: #e0e0e0;
-    margin-bottom: 6px;
-}
-
-.mw-progress {
-    margin-left: 5px;
-    border: none;
-}
-
-.mw-progress trough {
-    background-color: rgba(0, 255, 255, 0.12);
-    border-radius: 10px;
-    min-height: 12px;
-    min-width: 180px;
-    border: 1px solid rgba(0, 255, 255, 0.35);
-}
-
-.mw-progress highlight {
-    background-image: linear-gradient(to right, #00ffff, #ff00ff);
-    border-radius: 10px;
-    box-shadow: 0 0 4px #00ffff;
-}
-
-.mw-vol-box {
-    margin-left: 2px;
-}
-
-.mw-vol-scale {
-    border: none;
-}
-
-.mw-vol-scale trough {
-    background-color: rgba(0, 255, 255, 0.12);
-    border-radius: 10px;
-    min-height: 90px;
-    min-width: 16px;
-    border: 1px solid rgba(0, 255, 255, 0.35);
-}
-
-.mw-vol-scale trough highlight {
-    background-image: linear-gradient(to top, #00ffff, #ff00ff);
-    border-radius: 10px;
-    box-shadow: 0 0 4px #00ffff;
-}
-
-.mw-vol-icon {
-    font-size: 24px;
-    text-shadow: 0 0 2px #00ffff;
-    background: none;
-    border: none;
-    padding-right: 10px;
-    margin-bottom: 6px;
-    transition: all 0.2s ease-in-out;
-}
-
-.mw-vol-icon:hover {
-    text-shadow: 0 0 10px rgba(255, 0, 255, 1);
-}
-
-.mw-cava {
-    margin-left: 5px;
-    font-family: monospace;
-    font-size: 10px;
-    letter-spacing: 1px;
-    color: #00ffff;
-    text-shadow: 0 0 4px rgba(0, 255, 255, 0.7);
-    margin-top: 8px;
-}
+@import "./music-widget/eww_music_widget.scss";
