@@ -221,6 +221,7 @@ echo ""
 info "Configurando la instalación..."
 
 RPATH=$(pwd)
+EWW_READY=true
 
 # ═══════════════════════════════════════════════════════════════════════════
 # ACTUALIZACIÓN DEL SISTEMA
@@ -420,9 +421,27 @@ safe_install cava && finish_step || fail_step "No se pudo instalar CAVA"
 
 # Instalar dependencias de eww (completas para X11)
 start_step "Instalar dependencias de EWW"
-safe_install libgtk-3-dev libpango1.0-dev libgdk-pixbuf-2.0-dev libcairo2-dev libglib2.0-dev \
-    libgtk-layer-shell-dev libdbusmenu-gtk3-dev libdbusmenu-glib-dev librsvg2-dev libssl-dev \
-    pkg-config libgdk-pixbuf2.0-dev libatk1.0-dev gobject-introspection libgirepository1.0-dev && finish_step || fail_step "Dependencias de EWW incompletas"
+if safe_install libgtk-3-dev libpango1.0-dev libgdk-pixbuf-2.0-dev libcairo2-dev libglib2.0-dev \
+    libatk1.0-dev pkg-config librsvg2-dev libssl-dev libx11-dev libxext-dev libxrandr-dev \
+    libxinerama-dev libxi-dev libxcursor-dev libxfixes-dev; then
+    # Dependencias opcionales (pueden no existir en algunas versiones de Kali)
+    if ! safe_install libgtk-layer-shell-dev libdbusmenu-gtk3-dev libdbusmenu-glib-dev \
+        gobject-introspection libgirepository1.0-dev; then
+        warning "Algunas dependencias opcionales de EWW no están disponibles; se continúa con X11"
+    fi
+
+    # Verificación clave para evitar fallo de gdk-sys en cargo
+    if pkg-config --exists gdk-3.0 >> "$LOG_FILE" 2>&1; then
+        pkg-config --modversion gdk-3.0 >> "$LOG_FILE" 2>&1
+        finish_step
+    else
+        EWW_READY=false
+        fail_step "No se detecta gdk-3.0 (pkg-config). Revisa libgtk-3-dev y pkg-config"
+    fi
+else
+    EWW_READY=false
+    fail_step "Dependencias críticas de EWW incompletas"
+fi
 
 # Instalar Rust (necesario para eww)
 start_step "Instalar Rust"
@@ -440,7 +459,9 @@ fi
 
 # Instalar eww (ElKowar's Wacky Widgets)
 start_step "Compilar e instalar EWW"
-if safe_git_clone "https://github.com/elkowar/eww" "$HOME/github/eww" --full; then
+if [ "$EWW_READY" != true ]; then
+    fail_step "Saltado: faltan dependencias GTK (gdk-3.0 no disponible)"
+elif safe_git_clone "https://github.com/elkowar/eww" "$HOME/github/eww" --full; then
     cd ~/github/eww
     # Asegurar que cargo está disponible
     source "$HOME/.cargo/env" 2>/dev/null || true

@@ -20,6 +20,22 @@ sudo reboot
 - El fondo de pantalla se toma de ~/Wallpapers/wallpaper.*
 - Video completo del entorno: https://youtu.be/3clLjO8W7Q4?si=GupOi6Bqwuu2O9Wk
 
+### Solución rápida si falla EWW (`gdk-sys`)
+
+Si durante la instalación aparece `failed to run custom build command for gdk-sys`, instala dependencias GTK y valida `pkg-config`:
+
+```
+sudo apt update
+sudo apt install -y libgtk-3-dev libgdk-pixbuf-2.0-dev libpango1.0-dev libcairo2-dev libglib2.0-dev libatk1.0-dev pkg-config
+pkg-config --modversion gdk-3.0
+```
+
+Si el comando devuelve versión (por ejemplo `3.24.x`), vuelve a ejecutar:
+
+```
+bash kalipwm.sh
+```
+
 ## Comandos
 
 > [!NOTE]
