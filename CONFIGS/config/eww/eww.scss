@@ -1,3 +1,4 @@
+@import "./music-widget/eww_music_widget.scss";
 /* ╔══════════════════════════════════════════════════════════════════════════╗
    ║                         EWW STYLES                                       ║
    ║                  Estilos con animaciones                                 ║
@@ -7,20 +8,20 @@
    VARIABLES DE COLOR (personalizar según tu tema)
    ═══════════════════════════════════════════════════════════════════════════ */
 
+$bg: #1e1e2e;
+$bg-alt: #313244;
+$fg: #cdd6f4;
+$fg-alt: #a6adc8;
+$accent: #89b4fa;
+$accent-alt: #74c7ec;
+$red: #f38ba8;
+$green: #a6e3a1;
+$yellow: #f9e2af;
+$blue: #89b4fa;
+$magenta: #cba6f7;
+$cyan: #94e2d5;
+
 * {
-    --bg: #1e1e2e;
-    --bg-alt: #313244;
-    --fg: #cdd6f4;
-    --fg-alt: #a6adc8;
-    --accent: #89b4fa;
-    --accent-alt: #74c7ec;
-    --red: #f38ba8;
-    --green: #a6e3a1;
-    --yellow: #f9e2af;
-    --blue: #89b4fa;
-    --magenta: #cba6f7;
-    --cyan: #94e2d5;
-    
     font-family: "JetBrainsMono Nerd Font", "Hack Nerd Font", monospace;
 }
 
@@ -49,8 +50,8 @@
 }
 
 @keyframes glow {
-    0%, 100% { box-shadow: 0 0 5px var(--accent); }
-    50% { box-shadow: 0 0 20px var(--accent), 0 0 30px var(--accent-alt); }
+    0%, 100% { box-shadow: 0 0 5px $accent; }
+    50% { box-shadow: 0 0 20px $accent, 0 0 30px $accent-alt; }
 }
 
 @keyframes bounce {
@@ -63,37 +64,37 @@
    ═══════════════════════════════════════════════════════════════════════════ */
 
 .sidebar {
-    background: var(--bg);
+    background: $bg;
     border-radius: 0 20px 20px 0;
     padding: 20px;
     animation: slideIn 0.3s ease-out;
 }
 
 .music-topbar {
-    background: var(--bg);
+    background: $bg;
     border-radius: 16px;
     padding: 10px 16px;
 }
 
 .music-topbar-icon {
-    color: var(--accent);
+    color: $accent;
     font-size: 22px;
     min-width: 26px;
 }
 
 .music-topbar-title {
-    color: var(--fg);
+    color: $fg;
     font-size: 14px;
     font-weight: bold;
 }
 
 .music-topbar-artist {
-    color: var(--fg-alt);
+    color: $fg-alt;
     font-size: 11px;
 }
 
 .cava-bars {
-    color: var(--accent-alt);
+    color: $accent-alt;
     font-size: 12px;
     letter-spacing: 1px;
     min-width: 260px;
@@ -116,7 +117,7 @@
    ═══════════════════════════════════════════════════════════════════════════ */
 
 .clock-box {
-    background: var(--bg-alt);
+    background: $bg-alt;
     border-radius: 15px;
     padding: 20px;
     animation: fadeIn 0.5s ease-out;
@@ -128,22 +129,22 @@
 }
 
 .hour, .min {
-    color: var(--accent);
+    color: $accent;
     transition: all 0.3s ease;
 }
 
 .hour:hover, .min:hover {
-    color: var(--accent-alt);
-    text-shadow: 0 0 10px var(--accent);
+    color: $accent-alt;
+    text-shadow: 0 0 10px $accent;
 }
 
 .separator {
-    color: var(--fg-alt);
+    color: $fg-alt;
     animation: pulse 1s infinite;
 }
 
 .date {
-    color: var(--fg-alt);
+    color: $fg-alt;
     font-size: 14px;
     margin-top: 5px;
 }
@@ -153,7 +154,7 @@
    ═══════════════════════════════════════════════════════════════════════════ */
 
 .music-box {
-    background: var(--bg-alt);
+    background: $bg-alt;
     border-radius: 15px;
     padding: 20px;
     animation: fadeIn 0.5s ease-out 0.1s backwards;
@@ -171,31 +172,31 @@
     border-radius: 50%;
     background-size: cover;
     background-position: center;
-    background-color: var(--bg);
-    border: 3px solid var(--accent);
+    background-color: $bg;
+    border: 3px solid $accent;
     transition: all 0.3s ease;
 }
 
 .album-art.spinning {
     animation: spin 8s linear infinite;
-    border-color: var(--green);
-    box-shadow: 0 0 20px var(--green);
+    border-color: $green;
+    box-shadow: 0 0 20px $green;
 }
 
 .album-art:hover {
     transform: scale(1.05);
-    box-shadow: 0 0 25px var(--accent);
+    box-shadow: 0 0 25px $accent;
 }
 
 .music-title {
-    color: var(--fg);
+    color: $fg;
     font-size: 16px;
     font-weight: bold;
     text-align: center;
 }
 
 .music-artist {
-    color: var(--fg-alt);
+    color: $fg-alt;
     font-size: 12px;
     text-align: center;
 }
@@ -205,13 +206,13 @@
 }
 
 .music-progress trough {
-    background: var(--bg);
+    background: $bg;
     border-radius: 10px;
     min-height: 8px;
 }
 
 .music-progress slider {
-    background: var(--accent);
+    background: $accent;
     border-radius: 50%;
     min-width: 15px;
     min-height: 15px;
@@ -219,12 +220,12 @@
 }
 
 .music-progress slider:hover {
-    background: var(--accent-alt);
+    background: $accent-alt;
     transform: scale(1.2);
 }
 
 .music-progress highlight {
-    background: linear-gradient(90deg, var(--accent), var(--accent-alt));
+    background: linear-gradient(90deg, $accent, $accent-alt);
     border-radius: 10px;
 }
 
@@ -233,8 +234,8 @@
 }
 
 .ctrl-btn {
-    background: var(--bg);
-    color: var(--fg);
+    background: $bg;
+    color: $fg;
     border: none;
     border-radius: 50%;
     min-width: 40px;
@@ -244,8 +245,8 @@
 }
 
 .ctrl-btn:hover {
-    background: var(--accent);
-    color: var(--bg);
+    background: $accent;
+    color: $bg;
     transform: scale(1.1);
 }
 
@@ -253,13 +254,13 @@
     min-width: 50px;
     min-height: 50px;
     font-size: 22px;
-    background: var(--accent);
-    color: var(--bg);
+    background: $accent;
+    color: $bg;
     animation: glow 2s infinite;
 }
 
 .play-btn:hover {
-    background: var(--accent-alt);
+    background: $accent-alt;
     animation: none;
     transform: scale(1.15);
 }
@@ -282,14 +283,14 @@
 }
 
 .stats-title {
-    color: var(--fg);
+    color: $fg;
     font-size: 12px;
     font-weight: 700;
     letter-spacing: 1px;
 }
 
 .stats-time {
-    color: var(--accent-alt);
+    color: $accent-alt;
     font-size: 12px;
     font-weight: 700;
 }
@@ -306,18 +307,18 @@
 }
 
 .sys-icon {
-    color: var(--accent);
+    color: $accent;
     font-size: 18px;
     min-width: 20px;
     transition: color 0.2s ease;
 }
 
 .sys-icon:hover {
-    color: var(--accent-alt);
+    color: $accent-alt;
 }
 
 .sys-label {
-    color: var(--fg-alt);
+    color: $fg-alt;
     font-size: 10px;
     font-weight: 700;
     text-transform: uppercase;
@@ -325,13 +326,13 @@
 }
 
 .stat-value {
-    color: var(--fg);
+    color: $fg;
     font-size: 12px;
     font-weight: 700;
 }
 
 .stat-unit {
-    color: var(--fg-alt);
+    color: $fg-alt;
     font-size: 10px;
     font-weight: 700;
     margin-top: 1px;
@@ -349,26 +350,26 @@
 }
 
 .cpu-bar highlight {
-    background: linear-gradient(90deg, var(--green), var(--yellow));
+    background: linear-gradient(90deg, $green, $yellow);
     border-radius: 5px;
     transition: all 0.5s ease;
 }
 
 .mem-bar highlight {
-    background: linear-gradient(90deg, var(--blue), var(--magenta));
+    background: linear-gradient(90deg, $blue, $magenta);
     border-radius: 5px;
     transition: all 0.5s ease;
 }
 
 .vol-bar slider {
-    background: var(--cyan);
+    background: $cyan;
     border-radius: 50%;
     min-width: 10px;
     min-height: 10px;
 }
 
 .vol-bar highlight {
-    background: linear-gradient(90deg, var(--cyan), var(--green));
+    background: linear-gradient(90deg, $cyan, $green);
     border-radius: 5px;
 }
 

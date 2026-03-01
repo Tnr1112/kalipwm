@@ -12,8 +12,11 @@ PERCENT=$(echo "$BAT_INFO" | awk -F', ' '{print $2}')
 [ -z "$PERCENT" ] && PERCENT="$(cat "$BATTERY_PATH/capacity" 2>/dev/null)%"
 [ -z "$PERCENT" ] && exit 0
 
+PERCENT_VALUE=$(echo "$PERCENT" | tr -cd '0-9')
+[ -n "$PERCENT_VALUE" ] && PERCENT="${PERCENT_VALUE}%"
+
 if [ "$STATE" = "Discharging" ]; then
-	echo -e "%{F#FF0000} %{F#e2ee6a}${PERCENT}%{u-}"
+	echo -e "%{F#FF6B6B}🔋 %{F#e2ee6a}${PERCENT}%{u-}"
 else
-	echo -e "%{F#27FF00} %{F#e2ee6a}${PERCENT}%{u-}"
+	echo -e "%{F#6BFF95}⚡🔋 %{F#e2ee6a}${PERCENT}%{u-}"
 fi
