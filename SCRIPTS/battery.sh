@@ -1,8 +1,19 @@
 #!/bin/bash
 
-BAT_PATH="/sys/class/power_supply/BAT0"
+BAT_PATH=""
 
-if [ ! -d "$BAT_PATH" ]; then
+if [ -d "/sys/class/power_supply/BAT0" ]; then
+	BAT_PATH="/sys/class/power_supply/BAT0"
+else
+	for candidate in /sys/class/power_supply/BAT*; do
+		if [ -d "$candidate" ]; then
+			BAT_PATH="$candidate"
+			break
+		fi
+	done
+fi
+
+if [ -z "$BAT_PATH" ] || [ ! -d "$BAT_PATH" ]; then
 	exit 0
 fi
 

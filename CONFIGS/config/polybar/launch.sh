@@ -16,6 +16,7 @@ polybar secondary -c ~/.config/polybar/current.ini &
 polybar terciary -c ~/.config/polybar/current.ini &
 polybar quaternary -c ~/.config/polybar/current.ini &
 polybar quinto -c ~/.config/polybar/current.ini &
+polybar music -c ~/.config/polybar/current.ini &
 
 ## Right bar
 #polybar top -c ~/.config/polybar/current.ini &

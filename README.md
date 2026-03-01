@@ -23,7 +23,7 @@ sudo reboot
 ## Novedades (Neón + Widgets)
 
 - Se aplicó una paleta neón equilibrada (fucsia + celeste) en Polybar, EWW y menús rofi de Polybar.
-- El widget de música en EWW queda flotando en la esquina superior derecha sin tapar módulos de Polybar.
+- El widget de música se integra en Polybar y muestra metadata con visualizador tipo CAVA.
 - El widget muestra artista/título y visualizador CAVA cuando hay reproducción activa.
 - El icono de power de la esquina superior derecha fue actualizado y abre un menú oscuro moderno.
 - El módulo de batería ahora detecta notebooks automáticamente (BAT0), muestra progreso + estado de carga y se oculta en equipos sin batería.

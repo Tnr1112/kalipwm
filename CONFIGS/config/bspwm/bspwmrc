@@ -22,7 +22,6 @@ vmware-user-suid-wrapper &
 ~/.config/polybar/launch.sh --custom
 command -v eww >/dev/null && {
 	eww daemon >/dev/null 2>&1
-	eww open music >/dev/null 2>&1
 } &
 picom &
 #bspc config border_width 0
