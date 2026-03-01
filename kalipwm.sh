@@ -503,7 +503,7 @@ fi
 
 # ghidra
 start_step "Instalar herramientas adicionales"
-safe_install ghidra flameshot playerctl && finish_step || fail_step "Algunas herramientas no se instalaron"
+safe_install ghidra flameshot playerctl pamixer && finish_step || fail_step "Algunas herramientas no se instalaron"
 
 # Cambiar zona horaria, para listar zonas horarias ejecutar: timedatectl list-timezones
 start_step "Configurar sistema"
@@ -540,7 +540,9 @@ start_step "Establecer permisos"
 chmod +x ~/.config/bspwm/bspwmrc
 chmod +x ~/.config/bspwm/scripts/bspwm_resize
 chmod +x ~/.config/polybar/launch.sh
+chmod +x ~/.config/polybar/scripts/*
 chmod +x ~/.config/scripts/*
+chmod +x ~/.config/eww/*.sh 2>/dev/null || true
 finish_step
 
 # Crear script para lanzar eww

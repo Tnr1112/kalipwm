@@ -20,6 +20,14 @@ sudo reboot
 - El fondo de pantalla se toma de ~/Wallpapers/wallpaper.*
 - Video completo del entorno: https://youtu.be/3clLjO8W7Q4?si=GupOi6Bqwuu2O9Wk
 
+## Novedades (Neón + Widgets)
+
+- Se aplicó una paleta neón equilibrada (fucsia + celeste) en Polybar, EWW y menús rofi de Polybar.
+- El widget de música en EWW queda flotando en la esquina superior derecha sin tapar módulos de Polybar.
+- El widget muestra artista/título y visualizador CAVA cuando hay reproducción activa.
+- El icono de power de la esquina superior derecha fue actualizado y abre un menú oscuro moderno.
+- El módulo de batería ahora detecta notebooks automáticamente (BAT0), muestra progreso + estado de carga y se oculta en equipos sin batería.
+
 ### Solución rápida si falla EWW (`gdk-sys`)
 
 Si durante la instalación aparece `failed to run custom build command for gdk-sys`, instala dependencias GTK y valida `pkg-config`:
@@ -55,6 +63,8 @@ bash kalipwm.sh
 | Windows + Alt + Flechas     | Redimensiona la ventana actual                              |
 | Windows + Shift + F         | Abre Firefox                                                |
 | Windows + Shift + B         | Abre Burp Suite                                             |
+| Windows + Shift + M         | Toggle del widget de música EWW                             |
+| Windows + Shift + W         | Toggle del sidebar EWW                                      |
 | Windows + Shift + A         | Abre el gestor de archivos Thunar                           |
 | Windows + Shift + 1,2,3,4   | Mueve la ventana actual a otro escritorio                   |
 | Windows + Shift + Flechas   | Mueve la ventana actual                                     |
@@ -94,6 +104,10 @@ Rofi
 Sxhkd
 Picom
 Neovim
+EWW
+CAVA
+Playerctl
+Pamixer
 ```
 
 ## Créditos

@@ -20,7 +20,6 @@ polybar quinto -c ~/.config/polybar/current.ini &
 ## Right bar
 #polybar top -c ~/.config/polybar/current.ini &
 polybar primary -c ~/.config/polybar/current.ini &
-polybar battery -c ~/.config/polybar/current.ini &
 #polybar bluetooth -c ~/.config/polybar/current.ini &
 
 ## Center bar

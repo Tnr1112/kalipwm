@@ -20,6 +20,10 @@ vmware-user-suid-wrapper &
 #bspc config pointer_motion_interval 100
 /usr/bin/feh --bg-fill ~/Wallpapers/wallpapersden.com_huawei-4k-stock-abstract_2560x1440.jpg
 ~/.config/polybar/launch.sh --custom
+command -v eww >/dev/null && {
+	eww daemon >/dev/null 2>&1
+	eww open music >/dev/null 2>&1
+} &
 picom &
 #bspc config border_width 0
 wmname LG3D &
