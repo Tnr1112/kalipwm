@@ -161,6 +161,10 @@ super + shift + w
 super + shift + m
 	eww open --toggle musicbar
 
+# Abrir widget cyberpunk de música (repo abod8639)
+super + shift + n
+	eww open --toggle music-widget
+
 # Abrir estadísticas del sistema
 super + shift + x
 	eww open --toggle stats

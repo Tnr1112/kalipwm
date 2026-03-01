@@ -1,0 +1,82 @@
+;; Music Widget (adaptado de abod8639/eww-music-widget)
+
+;; --- Listeners & Polls ---
+(deflisten mw_song_title :initial "No Music Playing"
+  "playerctl metadata --format '{{title}}' --follow 2>/dev/null || echo 'No Music Playing'")
+
+(deflisten mw_song_artist :initial "Unknown Artist"
+  "playerctl metadata --format '{{artist}}' --follow 2>/dev/null || echo 'Unknown Artist'")
+
+(deflisten mw_player_status :initial "Stopped"
+  "playerctl metadata --format '{{status}}' --follow 2>/dev/null || echo 'Stopped'")
+
+(defpoll mw_song_length_s :interval "2s"
+  "playerctl metadata mpris:length 2>/dev/null | awk '{print $1 / 1000000}' || echo 1")
+
+(defpoll mw_song_position_s :interval "1s"
+  "playerctl position 2>/dev/null || echo 0")
+
+(defpoll mw_formatted_position :interval "1s"
+  "playerctl position -f '{{duration(position)}}' 2>/dev/null || echo '0:00'")
+
+(defpoll mw_cover_art_path :interval "1s"
+  "$HOME/.config/eww/music-widget/get-cover.sh")
+
+(defpoll mw_volume_percent :interval "2s"
+  "$HOME/.config/eww/music-widget/volumecontroller.sh get")
+
+(defpoll mw_volume_mute :interval "2s"
+  "pamixer --get-mute 2>/dev/null || echo false")
+
+(deflisten mw_cava :initial ""
+  "bash $HOME/.config/eww/music-widget/cava.sh")
+
+;; --- Widget Definition ---
+(defwidget music-widget []
+  (box :class "music-widget" :orientation "h" :space-evenly false
+    (box :class "cover-art" :style "background-image: url('${mw_cover_art_path}');")
+    (box :class "music-info" :orientation "v" :space-evenly false
+      (label :class "song-title" :text mw_song_title :limit-width 25)
+      (label :class "artist" :text mw_song_artist :limit-width 25)
+
+      (box :class "controls" :orientation "h"
+        (button :onclick "playerctl previous" "󰒮")
+        (button :onclick "playerctl play-pause" {mw_player_status == "Playing" ? "󰏤" : "󰐊"})
+        (button :onclick "playerctl next" "󰒭"))
+
+      (label :class "position" :text mw_formatted_position)
+
+      (scale :class "progress-bar"
+             :min 0
+             :max mw_song_length_s
+             :value mw_song_position_s
+             :onchange "playerctl position {}")
+
+      (label :class "cava-visualizer" :text mw_cava))
+
+    (box :class "volume_bar"
+         :orientation "v"
+         :spacing 20
+         :space-evenly false
+         :vexpand false
+         :hexpand false
+      (button :onclick "$HOME/.config/eww/music-widget/volumecontroller.sh mute"
+              :class "vol_icon"
+              :style "color: ${mw_volume_mute == 'true' ? '#ff00ff' : '#00ffff'};"
+              {mw_volume_mute == "true" ? "󰝟" : ""})
+      (scale :flipped true
+             :orientation "v"
+             :max 100
+             :min 0
+             :value mw_volume_percent
+             :onchange "$HOME/.config/eww/music-widget/volumecontroller.sh set {}"))))
+
+;; --- Window Definition ---
+(defwindow music-widget
+  :monitor 0
+  :geometry (geometry :x "5px"
+                      :y "5px"
+                      :width "440px"
+                      :height "120px")
+  :wm-ignore true
+  (music-widget))
