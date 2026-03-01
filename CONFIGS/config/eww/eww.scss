@@ -268,42 +268,84 @@
    SYSTEM STATS
    ═══════════════════════════════════════════════════════════════════════════ */
 
-.system-box {
-    background: var(--bg-alt);
-    border-radius: 15px;
-    padding: 20px;
-    animation: fadeIn 0.5s ease-out 0.2s backwards;
+
+.stats-card {
+    background: linear-gradient(145deg, rgba(49, 50, 68, 0.95), rgba(30, 30, 46, 0.95));
+    border-radius: 16px;
+    padding: 14px 14px 12px 14px;
+    border: 1px solid rgba(137, 180, 250, 0.16);
+    animation: fadeIn 0.35s ease-out;
+}
+
+.stats-header {
+    margin-bottom: 2px;
+}
+
+.stats-title {
+    color: var(--fg);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.stats-time {
+    color: var(--accent-alt);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.stat-item {
+    background: rgba(30, 30, 46, 0.68);
+    border-radius: 12px;
+    padding: 8px 10px;
+    border: 1px solid rgba(166, 173, 200, 0.12);
+}
+
+.stat-top {
+    margin-bottom: 2px;
 }
 
 .sys-icon {
     color: var(--accent);
-    font-size: 24px;
-    min-width: 35px;
-    transition: all 0.3s ease;
+    font-size: 18px;
+    min-width: 20px;
+    transition: color 0.2s ease;
 }
 
 .sys-icon:hover {
-    transform: scale(1.2);
-    animation: bounce 0.5s ease;
+    color: var(--accent-alt);
 }
 
 .sys-label {
     color: var(--fg-alt);
-    font-size: 11px;
+    font-size: 10px;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1px;
 }
 
+.stat-value {
+    color: var(--fg);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.stat-unit {
+    color: var(--fg-alt);
+    font-size: 10px;
+    font-weight: 700;
+    margin-top: 1px;
+}
+
 .sys-bar {
-    min-height: 8px;
+    min-height: 6px;
     border-radius: 5px;
-    margin-top: 3px;
 }
 
 .sys-bar trough {
-    background: var(--bg);
+    background: rgba(30, 30, 46, 0.95);
     border-radius: 5px;
-    min-height: 8px;
+    min-height: 6px;
 }
 
 .cpu-bar highlight {
@@ -321,8 +363,8 @@
 .vol-bar slider {
     background: var(--cyan);
     border-radius: 50%;
-    min-width: 12px;
-    min-height: 12px;
+    min-width: 10px;
+    min-height: 10px;
 }
 
 .vol-bar highlight {
@@ -335,7 +377,7 @@
    ═══════════════════════════════════════════════════════════════════════════ */
 
 .music-box:hover,
-.system-box:hover,
+.stats-card:hover,
 .clock-box:hover {
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }

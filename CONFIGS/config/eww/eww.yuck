@@ -86,29 +86,45 @@
 
 ; Widget de sistema
 (defwidget system-stats []
-  (box :class "system-box" :orientation "v" :space-evenly false :spacing 15
+  (box :class "stats-card" :orientation "v" :space-evenly false :spacing 12
+    (box :class "stats-header" :orientation "h" :space-evenly false
+      (label :class "stats-title" :text "SYSTEM")
+      (label :class "stats-time" :text "${time-hour}:${time-min}"))
+
     ; CPU
-    (box :orientation "h" :space-evenly false :spacing 10
-      (label :class "sys-icon" :text "󰻠")
-      (box :orientation "v" :space-evenly false
-        (label :class "sys-label" :text "CPU")
-        (progress :class "sys-bar cpu-bar" :value cpu-usage)))
-    
+    (box :class "stat-item" :orientation "v" :space-evenly false :spacing 5
+      (box :class "stat-top" :orientation "h" :space-evenly false
+        (box :orientation "h" :space-evenly false :spacing 8
+          (label :class "sys-icon" :text "󰻠")
+          (label :class "sys-label" :text "CPU"))
+        (box :orientation "h" :space-evenly false :spacing 2
+          (label :class "stat-value" :text cpu-usage)
+          (label :class "stat-unit" :text "%")))
+      (progress :class "sys-bar cpu-bar" :value cpu-usage))
+
     ; RAM
-    (box :orientation "h" :space-evenly false :spacing 10
-      (label :class "sys-icon" :text "󰍛")
-      (box :orientation "v" :space-evenly false
-        (label :class "sys-label" :text "RAM")
-        (progress :class "sys-bar mem-bar" :value mem-usage)))
-    
+    (box :class "stat-item" :orientation "v" :space-evenly false :spacing 5
+      (box :class "stat-top" :orientation "h" :space-evenly false
+        (box :orientation "h" :space-evenly false :spacing 8
+          (label :class "sys-icon" :text "󰍛")
+          (label :class "sys-label" :text "RAM"))
+        (box :orientation "h" :space-evenly false :spacing 2
+          (label :class "stat-value" :text mem-usage)
+          (label :class "stat-unit" :text "%")))
+      (progress :class "sys-bar mem-bar" :value mem-usage))
+
     ; Volumen
-    (box :orientation "h" :space-evenly false :spacing 10
-      (label :class "sys-icon" :text {volume > 50 ? "󰕾" : volume > 0 ? "󰖀" : "󰝟"})
-      (box :orientation "v" :space-evenly false
-        (label :class "sys-label" :text "VOL")
-        (scale :class "sys-bar vol-bar" 
-               :min 0 :max 100 :value volume
-               :onchange "pactl set-sink-volume @DEFAULT_SINK@ {}%")))))
+    (box :class "stat-item" :orientation "v" :space-evenly false :spacing 5
+      (box :class "stat-top" :orientation "h" :space-evenly false
+        (box :orientation "h" :space-evenly false :spacing 8
+          (label :class "sys-icon" :text {volume > 50 ? "󰕾" : volume > 0 ? "󰖀" : "󰝟"})
+          (label :class "sys-label" :text "VOLUME"))
+        (box :orientation "h" :space-evenly false :spacing 2
+          (label :class "stat-value" :text volume)
+          (label :class "stat-unit" :text "%")))
+      (scale :class "sys-bar vol-bar"
+             :min 0 :max 100 :value volume
+             :onchange "pactl set-sink-volume @DEFAULT_SINK@ {}%"))))
 
 ; Widget de reloj
 (defwidget clock []
@@ -164,15 +180,15 @@
 ; Ventana del reproductor de música (standalone)
 (defwindow music
   :monitor 0
-  :geometry (geometry :x "50%"
-                      :y "50%"
-                      :width "320px"
-                      :height "400px"
-                      :anchor "center center")
-  :stacking "overlay"
+  :geometry (geometry :x "0%"
+                      :y "10px"
+                      :width "780px"
+                      :height "90px"
+                      :anchor "top center")
+  :stacking "fg"
   :exclusive false
-  :focusable true
-  (music-player))
+  :focusable false
+  (music-topbar))
 
 ; Barra superior de música
 (defwindow musicbar
@@ -190,10 +206,10 @@
 ; Ventana de estadísticas del sistema
 (defwindow stats
   :monitor 0
-  :geometry (geometry :x "-10px"
-                      :y "10px"
-                      :width "200px"
-                      :height "200px"
+  :geometry (geometry :x "18px"
+                      :y "16px"
+                      :width "320px"
+                      :height "260px"
                       :anchor "top right")
   :stacking "fg"
   :exclusive false
