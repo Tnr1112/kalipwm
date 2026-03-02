@@ -3,6 +3,7 @@
 CAVA_CONFIG="$HOME/.config/eww/cava.conf"
 NEON_CYAN="#22d3ee"
 NEON_PINK="#ff3dbf"
+MARQUEE_WIDTH=26
 
 bars_map=("▁" "▂" "▃" "▄" "▅" "▆" "▇" "█")
 
@@ -19,7 +20,9 @@ update_player() {
         track=""
     fi
 
-    track="${track:0:26}"
+    if [ -n "$track" ]; then
+        track="$track   •   "
+    fi
 }
 
 render_from_values() {
@@ -40,11 +43,20 @@ render_from_values() {
 
 emit_line() {
     local cava_line="$1"
+    local display_track=""
 
     case "$status" in
         Playing)
             if [ -n "$track" ]; then
-                echo "%{F${NEON_CYAN}}${cava_line}%{F-} %{F${NEON_PINK}}${track}%{F-}"
+                local doubled_track="${track}${track}"
+                local track_len=${#track}
+
+                if [ "$track_len" -gt 0 ]; then
+                    local start=$((frame % track_len))
+                    display_track="${doubled_track:$start:$MARQUEE_WIDTH}"
+                fi
+
+                echo "%{F${NEON_CYAN}}${cava_line}%{F-} %{F${NEON_PINK}}${display_track}%{F-}"
             else
                 echo "%{F${NEON_CYAN}}${cava_line}%{F-}"
             fi
