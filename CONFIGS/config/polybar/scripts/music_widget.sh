@@ -52,7 +52,7 @@ emit_line() {
                 local track_len=${#track}
 
                 if [ "$track_len" -gt 0 ]; then
-                    local start=$((frame % track_len))
+                    local start=$((scroll_pos % track_len))
                     display_track="${doubled_track:$start:$MARQUEE_WIDTH}"
                 fi
 
@@ -68,11 +68,17 @@ emit_line() {
 }
 
 frame=0
+scroll_pos=0
 update_player
 
 if command -v cava >/dev/null 2>&1 && [ -f "$CAVA_CONFIG" ]; then
     cava -p "$CAVA_CONFIG" 2>/dev/null | while IFS=';' read -r -a values; do
         ((frame++))
+
+        if [ $((frame % 6)) -eq 0 ]; then
+            ((scroll_pos++))
+        fi
+
         if [ $((frame % 8)) -eq 0 ]; then
             update_player
         fi

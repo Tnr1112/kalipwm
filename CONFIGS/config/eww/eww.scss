@@ -312,3 +312,110 @@
 }
 
 @import "music-widget/eww.scss";
+
+.music-widget {
+    background-color: rgba(10, 5, 30, 0.85);
+    border-radius: 10px;
+    padding: 10px;
+    color: #e0e0e0;
+    font-family: "JetBrains Mono Nerd Font";
+    border: 0.5px solid #00ffff;
+    box-shadow: 0 0 12px rgba(0, 255, 255, 0.1);
+}
+
+.music-widget .cover-art {
+    background-size: cover;
+    background-position: center;
+    min-width: 155px;
+    min-height: 125px;
+    border-radius: 5px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    padding-right: 20px;
+    padding-bottom: 50px;
+    border: 1px solid rgba(0, 255, 255, 0.3);
+}
+
+.music-widget .music-info {
+    padding: 5px 0;
+    margin-right: 10px;
+}
+
+.music-widget .song-title {
+    font-size: 15px;
+    font-weight: bold;
+    color: #ff00ff;
+    margin-bottom: 5px;
+}
+
+.music-widget .artist {
+    font-size: 14px;
+    opacity: 0.7;
+    color: #00ffff;
+    margin-bottom: 5px;
+}
+
+.music-widget .controls {
+    margin: 8px 0;
+    font-size: 22px;
+}
+
+.music-widget .controls button {
+    background: none;
+    border: none;
+    color: #ff00ff;
+    padding: 0 10px;
+}
+
+.music-widget .controls button:hover {
+    color: #00ffff;
+}
+
+.music-widget .position {
+    font-size: 12px;
+    opacity: 0.75;
+    color: #e0e0e0;
+    margin-bottom: 10px;
+}
+
+.music-widget .progress-bar trough {
+    background-color: rgba(0, 255, 255, 0.1);
+    border-radius: 10px;
+    min-height: 12px;
+    min-width: 180px;
+    border: 1px solid rgba(0, 255, 255, 0.3);
+}
+
+.music-widget .progress-bar highlight {
+    background-image: linear-gradient(to right, #00ffff, #ff00ff);
+    border-radius: 10px;
+}
+
+.music-widget .volume_bar scale trough {
+    background-color: rgba(0, 255, 255, 0.1);
+    border-radius: 10px;
+    min-height: 90px;
+    min-width: 16px;
+    border: 1px solid rgba(0, 255, 255, 0.3);
+}
+
+.music-widget .volume_bar scale trough highlight {
+    background-image: linear-gradient(to top, #00ffff, #ff00ff);
+    border-radius: 10px;
+}
+
+.music-widget .vol_icon {
+    font-size: 24px;
+    background: none;
+    border: none;
+    padding-right: 20px;
+}
+
+.music-widget .cava-visualizer {
+    font-family: monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: #00ffff;
+    margin-top: 10px;
+}
