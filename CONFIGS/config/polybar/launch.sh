@@ -13,7 +13,6 @@ while pgrep -u $UID -x polybar >/dev/null; do sleep 1; done
 ## Left bar
 polybar log -c ~/.config/polybar/current.ini &
 polybar secondary -c ~/.config/polybar/current.ini &
-polybar terciary -c ~/.config/polybar/current.ini &
 polybar quaternary -c ~/.config/polybar/current.ini &
 polybar quinto -c ~/.config/polybar/current.ini &
 polybar music -c ~/.config/polybar/current.ini &

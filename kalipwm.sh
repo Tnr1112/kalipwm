@@ -543,6 +543,7 @@ chmod +x ~/.config/polybar/launch.sh
 chmod +x ~/.config/polybar/scripts/*
 chmod +x ~/.config/scripts/*
 chmod +x ~/.config/eww/*.sh 2>/dev/null || true
+chmod +x ~/.config/eww/music-widget/*.sh 2>/dev/null || true
 finish_step
 
 # Crear script para lanzar eww
