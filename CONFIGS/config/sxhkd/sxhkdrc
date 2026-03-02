@@ -159,7 +159,7 @@ super + shift + w
 
 # Abrir solo el widget de música
 super + shift + m
-	eww open --toggle music
+	eww open --toggle music-widget
 
 # Abrir estadísticas del sistema
 super + shift + x

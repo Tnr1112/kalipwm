@@ -33,6 +33,10 @@ case "$status" in
 		icon=""
 		color="#22d3ee"
 		;;
+	"Not charging")
+		icon=""
+		color="#22d3ee"
+		;;
 	Discharging)
 		icon=""
 		color="#ff3dbf"

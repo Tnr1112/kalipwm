@@ -2,11 +2,24 @@
 
 CAVA_CONFIG="$HOME/.config/eww/cava.conf"
 NEON_CYAN="#22d3ee"
+NEON_PINK="#ff3dbf"
 
 bars_map=("▁" "▂" "▃" "▄" "▅" "▆" "▇" "█")
 
 update_player() {
     status="$(playerctl status 2>/dev/null || echo "Stopped")"
+    title="$(playerctl metadata title 2>/dev/null)"
+    artist="$(playerctl metadata artist 2>/dev/null)"
+
+    if [ -n "$title" ] && [ -n "$artist" ]; then
+        track="$artist - $title"
+    elif [ -n "$title" ]; then
+        track="$title"
+    else
+        track=""
+    fi
+
+    track="${track:0:26}"
 }
 
 render_from_values() {
@@ -30,7 +43,11 @@ emit_line() {
 
     case "$status" in
         Playing)
-            echo "%{F${NEON_CYAN}}${cava_line}%{F-}"
+            if [ -n "$track" ]; then
+                echo "%{F${NEON_CYAN}}${cava_line}%{F-} %{F${NEON_PINK}}${track}%{F-}"
+            else
+                echo "%{F${NEON_CYAN}}${cava_line}%{F-}"
+            fi
             ;;
         *)
             echo ""
