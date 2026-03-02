@@ -9,9 +9,16 @@ bars_map=("▁" "▂" "▃" "▄" "▅" "▆" "▇" "█")
 
 update_player() {
     status="$(playerctl status 2>/dev/null || echo "Stopped")"
-    track="$(playerctl metadata --format '{{artist}} - {{title}}' 2>/dev/null)"
+    artist="$(playerctl metadata artist 2>/dev/null)"
+    title="$(playerctl metadata title 2>/dev/null)"
 
-    if [ -z "$track" ]; then
+    if [ -n "$artist" ] && [ -n "$title" ]; then
+        track="$artist - $title"
+    elif [ -n "$title" ]; then
+        track="$title"
+    elif [ -n "$artist" ]; then
+        track="$artist"
+    else
         track="No music"
     fi
 
@@ -39,10 +46,18 @@ emit_line() {
 
     case "$status" in
         Playing)
-            echo "%{F${NEON_CYAN}}${cava_line}%{F-} %{F${NEON_FG}}${track}%{F-}"
+            if [ "$track" = "No music" ]; then
+                echo ""
+            else
+                echo "%{F${NEON_CYAN}}${cava_line}%{F-} %{F${NEON_FG}}${track}%{F-}"
+            fi
             ;;
         Paused)
-            echo "%{F${NEON_DIM}} %{track}%{F-}"
+            if [ "$track" = "No music" ]; then
+                echo ""
+            else
+                echo "%{F${NEON_DIM}} ${track}%{F-}"
+            fi
             ;;
         *)
             echo ""
