@@ -3,7 +3,7 @@
 target=$(cat ~/.config/scripts/target)
 
 if [ "$target" ]; then
-    echo "%{F#e51d0b}󰓾%{F#ffffff} $target%{u-}"
+    echo "%{F#22d3ee}󰃾%{F-} %{F#eaf2ff}$target%{F-}"
 else
-    echo "%{F#e51d0b}󰞇%{u-}%{F#ffffff} No target"
+    echo "%{F#ff3dbf}󰇇%{F-} %{F#a6b3c6}No target%{F-}"
 fi

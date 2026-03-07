@@ -1,10 +1,5 @@
 #!/bin/bash
 
-if command -v eww >/dev/null 2>&1; then
-    eww open --toggle stats >/dev/null 2>&1
-    exit 0
-fi
-
 current="$(pamixer --get-volume 2>/dev/null || echo 0)"
 
 options="0\n10\n20\n30\n40\n50\n60\n70\n80\n90\n100\n110\n120\n130\n140\n150\n+5\n-5\nmute\nunmute"

@@ -46,11 +46,11 @@ esac
 
 if [ "$capacity" -ge 90 ]; then
 	icon=""
-elif [ "$capacity" -ge 60 ]; then
+elif [ "$capacity" -ge 65 ]; then
 	icon=""
-elif [ "$capacity" -ge 30 ]; then
+elif [ "$capacity" -ge 45 ]; then
 	icon=""
-elif [ "$capacity" -ge 10 ]; then
+elif [ "$capacity" -ge 15 ]; then
 	icon=""
 else
 	icon=""

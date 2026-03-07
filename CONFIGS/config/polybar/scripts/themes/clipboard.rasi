@@ -87,4 +87,6 @@ element-text {
     expand:                         true;
     horizontal-align:               0;
     vertical-align:                 0.5;
+    background-color:               inherit;
+    text-color:                     inherit;
 }
