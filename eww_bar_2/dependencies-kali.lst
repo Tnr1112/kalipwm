@@ -1,0 +1,23 @@
+# Dependencias para Kali / Debian (BSPWM + EWW bar)
+# Instalar con:
+# sudo apt update && xargs -a dependencies-kali.lst sudo apt install -y
+
+jq
+socat
+cava
+upower
+network-manager
+blueman
+pavucontrol
+gnome-clocks
+playerctl
+python3
+python3-pip
+dos2unix
+libgtk-3-dev
+libgdk-pixbuf-2.0-dev
+libpango1.0-dev
+libcairo2-dev
+libglib2.0-dev
+libatk1.0-dev
+pkg-config
