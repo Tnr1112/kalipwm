@@ -1,0 +1,65 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   Volume Popup — Cyberpunk Neon Theme
+   ═══════════════════════════════════════════════════════════════════════ */
+
+$vol-bg: rgba(10, 5, 30, 0.92);
+$vol-cyan: #00ffff;
+$vol-magenta: #ff00ff;
+$vol-text: #e0e0e0;
+
+.vol-popup {
+  background-color: $vol-bg;
+  border-radius: 12px;
+  padding: 15px 10px;
+  border: 1px solid $vol-cyan;
+  box-shadow: 0 0 15px rgba($vol-cyan, 0.15);
+  font-family: "JetBrainsMono Nerd Font", monospace;
+}
+
+.vol-icon-large {
+  font-size: 28px;
+  color: $vol-cyan;
+  margin-bottom: 5px;
+}
+
+.vol-slider {
+  border: none;
+}
+
+.vol-slider trough {
+  background-color: rgba($vol-cyan, 0.1);
+  border-radius: 10px;
+  min-height: 140px;
+  min-width: 18px;
+  border: 1px solid rgba($vol-cyan, 0.3);
+  box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.5);
+}
+
+.vol-slider trough highlight {
+  background-image: linear-gradient(to top, $vol-cyan, $vol-magenta);
+  border-radius: 10px;
+  box-shadow: 0 0 6px $vol-cyan;
+}
+
+.vol-percent {
+  font-size: 16px;
+  font-weight: bold;
+  color: $vol-cyan;
+  margin-top: 5px;
+}
+
+.vol-mute-btn {
+  background: none;
+  border: 1px solid rgba($vol-magenta, 0.4);
+  border-radius: 8px;
+  color: $vol-magenta;
+  font-size: 10px;
+  padding: 4px 8px;
+  margin-top: 5px;
+  font-family: "JetBrainsMono Nerd Font", monospace;
+}
+
+.vol-mute-btn:hover {
+  background-color: rgba($vol-magenta, 0.15);
+  box-shadow: 0 0 8px rgba($vol-magenta, 0.3);
+}

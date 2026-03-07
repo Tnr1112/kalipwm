@@ -1,0 +1,41 @@
+;; ╔══════════════════════════════════════════════════════════════════════════╗
+;; ║                      VOLUME POPUP WIDGET                                 ║
+;; ╚══════════════════════════════════════════════════════════════════════════╝
+
+(defpoll vol_level :interval "500ms"
+  "pamixer --get-volume 2>/dev/null || echo 0")
+
+(defpoll vol_muted :interval "500ms"
+  "pamixer --get-mute 2>/dev/null || echo false")
+
+(defwidget volume-popup []
+  (box :class "vol-popup" :orientation "v" :space-evenly false :spacing 8
+    (label :class "vol-icon-large"
+           :text {vol_muted == "true" ? "󰝟" :
+                  vol_level < 30 ? "󰕿" :
+                  vol_level < 70 ? "󰖀" : "󰕾"})
+    (scale :class "vol-slider"
+           :flipped true
+           :orientation "v"
+           :min 0
+           :max 150
+           :value vol_level
+           :onchange "pamixer --set-volume {}")
+    (label :class "vol-percent" :text "${vol_level}%")
+    (button :class "vol-mute-btn"
+            :onclick "pamixer -t"
+            {vol_muted == "true" ? "MUTED" : "MUTE"})
+  )
+)
+
+(defwindow volume-popup
+  :monitor 0
+  :geometry (geometry :x "-170px"
+                      :y "5px"
+                      :width "70px"
+                      :height "280px"
+                      :anchor "top right")
+  :stacking "overlay"
+  :wm-ignore true
+  (volume-popup)
+)

@@ -1,38 +1,36 @@
 #!/bin/bash
 
-
 rofi_command="rofi -theme $HOME/.config/polybar/scripts/themes/powermenu.rasi"
 
 uptime=$(uptime -p | sed -e 's/up //g')
 
-# Options
-shutdown="⏻"
-reboot="󰜉"
+# Options (icon-only for clean grid)
 lock="󰌾"
-suspend="󰤄"
 logout="󰍃"
+suspend="󰤄"
+reboot="󰜉"
+shutdown="⏻"
 
-# Variable passed to rofi
-options="$lock\n$suspend\n$logout\n$reboot\n$shutdown"
+options="$lock\n$logout\n$suspend\n$reboot\n$shutdown"
 
-chosen="$(echo -e "$options" | $rofi_command -p "UP - $uptime" -dmenu -selected-row 0)"
+chosen="$(echo -e "$options" | $rofi_command -p "  $uptime" -dmenu -selected-row 0)"
 case $chosen in
-    $shutdown)
-        systemctl poweroff
-        ;;
-    $reboot)
-        systemctl reboot
-        ;;
-    $lock)
+    "$lock")
         i3lock
         ;;
-    $suspend)
-        mpc -q pause
-        amixer set Master mute
+    "$logout")
+        bspc quit
+        ;;
+    "$suspend")
+        mpc -q pause 2>/dev/null
+        amixer set Master mute 2>/dev/null
         systemctl suspend
         ;;
-    $logout)
-        bspc quit
+    "$reboot")
+        systemctl reboot
+        ;;
+    "$shutdown")
+        systemctl poweroff
         ;;
 esac
 
