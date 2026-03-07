@@ -3,9 +3,22 @@
 CAVA_CONFIG="$HOME/.config/eww/cava.conf"
 NEON_CYAN="#22d3ee"
 NEON_PINK="#ff3dbf"
+NEON_PURPLE="#b026ff"
 MARQUEE_WIDTH=26
 
-bars_map=("▁" "▂" "▃" "▄" "▅" "▆" "▇" "█")
+# Paleta de 8 colores para el gradiente (de Cyan a Pink)
+gradient_colors=(
+    "#22d3ee" # Nivel 0 - Cyan
+    "#41bdef" # Nivel 1
+    "#61a6f0" # Nivel 2
+    "#8090f1" # Nivel 3
+    "#a079f2" # Nivel 4
+    "#bf63f3" # Nivel 5
+    "#df4cf4" # Nivel 6
+    "#ff3dbf" # Nivel 7 - Pink
+)
+
+bars_map=(" " "▂" "▃" "▄" "▅" "▆" "▇" "█")
 
 update_player() {
     status="$(playerctl status 2>/dev/null || echo "Stopped")"
@@ -30,10 +43,18 @@ render_from_values() {
     local idx=0
 
     for value in "$@"; do
+        # Limpiamos el valor para evitar errores
         value="${value//[^0-9]/}"
         [ -z "$value" ] && value=0
         [ "$value" -gt 7 ] && value=7
-        rendered+="${bars_map[$value]}"
+
+        # Seleccionamos el color y el bloque exacto según la altura (0 a 7)
+        local bar_color="${gradient_colors[$value]}"
+        local bar_char="${bars_map[$value]}"
+
+        # Aplicamos la sintaxis de color de Polybar a CADA barra
+        rendered+="%{F${bar_color}}${bar_char}%{F-}"
+
         ((idx++))
         [ "$idx" -ge 16 ] && break
     done
@@ -45,24 +66,26 @@ emit_line() {
     local cava_line="$1"
     local display_track=""
 
+    if [ -n "$track" ]; then
+        local doubled_track="${track}${track}"
+        local track_len=${#track}
+
+        if [ "$track_len" -gt 0 ]; then
+            local start=$((scroll_pos % track_len))
+            display_track="${doubled_track:$start:$MARQUEE_WIDTH}"
+        fi
+    fi
+
     case "$status" in
         Playing)
-            if [ -n "$track" ]; then
-                local doubled_track="${track}${track}"
-                local track_len=${#track}
-
-                if [ "$track_len" -gt 0 ]; then
-                    local start=$((scroll_pos % track_len))
-                    display_track="${doubled_track:$start:$MARQUEE_WIDTH}"
-                fi
-
-                echo "%{F${NEON_CYAN}}${cava_line}%{F-} %{F${NEON_PINK}}${display_track}%{F-}"
-            else
-                echo "%{F${NEON_CYAN}}${cava_line}%{F-}"
-            fi
+            # cava_line ya trae sus propios colores, así que lo imprimimos directo
+            echo "${cava_line}  %{F${NEON_PINK}}  ${display_track}%{F-}"
+            ;;
+        Paused)
+            echo "%{F${NEON_PURPLE}}  Pausado %{F-} %{F${NEON_PINK}}${display_track}%{F-}"
             ;;
         *)
-            echo ""
+            echo "%{F${NEON_CYAN}}  Esperando señal...%{F-}"
             ;;
     esac
 }
@@ -89,7 +112,7 @@ if command -v cava >/dev/null 2>&1 && [ -f "$CAVA_CONFIG" ]; then
 else
     while true; do
         update_player
-        emit_line ""
+        emit_line ""
         sleep 1
     done
 fi

@@ -34,17 +34,30 @@ case "$status" in
 		color="#22d3ee"
 		;;
 	"Not charging")
-		icon=""
 		color="#22d3ee"
 		;;
 	Discharging)
-		icon=""
 		color="#ff3dbf"
 		;;
 	*)
-		icon=""
 		color="#a6b3c6"
 		;;
 esac
+
+if [ "$capacity" -ge 90 ]; then
+	icon=""
+elif [ "$capacity" -ge 60 ]; then
+	icon=""
+elif [ "$capacity" -ge 30 ]; then
+	icon=""
+elif [ "$capacity" -ge 10 ]; then
+	icon=""
+else
+	icon=""
+fi
+
+if [ "$status" = "Charging" ]; then
+	icon=""
+fi
 
 echo -e "%{F${color}}${icon}%{F-} %{F#eaf2ff}${capacity}%"

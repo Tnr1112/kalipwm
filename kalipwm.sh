@@ -23,7 +23,7 @@ RESET='\033[0m'
 LOG_FILE="/tmp/kalipwm_install_$(date +%Y%m%d_%H%M%S).log"
 FAILED_STEPS=()
 CURRENT_STEP=""
-TOTAL_STEPS=25
+TOTAL_STEPS=26
 CURRENT_STEP_NUM=0
 
 # Función para mensajes
@@ -239,7 +239,7 @@ fi
 start_step "Instalar paquetes base"
 if safe_install git bspwm vim feh scrot scrub zsh rofi xclip xsel locate wmname acpi sxhkd \
     imagemagick ranger kitty tmux python3-pip font-manager lsd bpython open-vm-tools-desktop open-vm-tools fastfetch \
-    fd-find ripgrep tree ncdu htop libnotify-bin; then
+    fd-find ripgrep tree ncdu htop libnotify-bin dos2unix pulseaudio-utils xdotool bluez blueman; then
     finish_step
 else
     fail_step "Algunos paquetes no se instalaron"
@@ -299,6 +299,20 @@ if safe_download "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0
     finish_step
 else
     fail_step "No se pudo descargar JetBrains Mono"
+fi
+
+# Instalar Iosevka Nerd Font
+start_step "Instalar Iosevka Nerd Font"
+mkdir -p /tmp/fonts
+if safe_download "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/Iosevka.zip" "/tmp/fonts/Iosevka.zip"; then
+    unzip -q /tmp/fonts/Iosevka.zip -d /tmp/fonts
+    mkdir -p ~/.local/share/fonts
+    mv /tmp/fonts/*.ttf ~/.local/share/fonts/ 2>/dev/null
+    rm -rf /tmp/fonts
+    fc-cache -fv >> "$LOG_FILE" 2>&1
+    finish_step
+else
+    fail_step "No se pudo descargar Iosevka Nerd Font"
 fi
 
 # Instalar ohmyzsh
@@ -533,6 +547,9 @@ cp -rv $RPATH/SCRIPTS/* ~/.config/scripts/ >> "$LOG_FILE" 2>&1
 # Copiar wallpapers
 mkdir -p ~/Wallpapers/
 cp -rv $RPATH/WALLPAPERS/* ~/Wallpapers/ >> "$LOG_FILE" 2>&1
+
+# Crear directorio de screenshots
+mkdir -p ~/screenshots/
 finish_step
 
 # Establecer permisos de ejecución
@@ -544,6 +561,14 @@ chmod +x ~/.config/polybar/scripts/*
 chmod +x ~/.config/scripts/*
 chmod +x ~/.config/eww/*.sh 2>/dev/null || true
 chmod +x ~/.config/eww/music-widget/*.sh 2>/dev/null || true
+
+# Normalizar finales de línea (evita fallos al editar/copiar desde Windows)
+find ~/.config/eww ~/.config/polybar ~/.config/scripts -type f \( \
+    -name "*.sh" -o -name "*.conf" -o -name "*.ini" -o -name "*.rasi" -o -name "*.yuck" -o -name "*.scss" -o -name "*.rc" \
+\) -exec dos2unix {} + >> "$LOG_FILE" 2>&1 || true
+
+# Limpiar cache de EWW para evitar usar CSS/estado roto de ejecuciones previas
+rm -rf ~/.cache/eww 2>/dev/null || true
 finish_step
 
 # Crear script para lanzar eww

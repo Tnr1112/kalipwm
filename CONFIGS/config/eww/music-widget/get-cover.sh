@@ -7,6 +7,7 @@
 WIDGET_DIR=$(dirname "$0")
 DEFAULT_COVER="$WIDGET_DIR/assets/DEFAULTImage.jpeg"
 CACHE_DIR="$HOME/.cache/eww/music-widget"
+LAST_COVER_FILE="$CACHE_DIR/last_cover_path"
 mkdir -p "$CACHE_DIR"
 
 # Function to safely exit with the default cover
@@ -15,21 +16,44 @@ show_default_cover() {
     exit 0
 }
 
+show_last_or_default() {
+    if [[ -f "$LAST_COVER_FILE" ]]; then
+        LAST_COVER=$(cat "$LAST_COVER_FILE" 2>/dev/null)
+        if [[ -n "$LAST_COVER" && -f "$LAST_COVER" ]]; then
+            echo "$LAST_COVER"
+            exit 0
+        fi
+    fi
+    show_default_cover
+}
+
+persist_last_cover() {
+    local path="$1"
+    [[ -n "$path" ]] && echo "$path" > "$LAST_COVER_FILE"
+}
+
 # Get the art URL. Exit if player is not running or no URL is available.
 COVER_URL=$(playerctl metadata mpris:artUrl 2>/dev/null)
 if [[ -z "$COVER_URL" ]]; then
-    show_default_cover
+    show_last_or_default
 fi
 
 # If it's a local file (file://), decode the path and use it directly.
 if [[ "$COVER_URL" == file://* ]]; then
-    # URL-decode the path to handle special characters like spaces
-    LOCAL_PATH=$(printf '%b' "${COVER_URL#file://}")
+    # URL decode (e.g. %20) for local files
+    LOCAL_PATH=$(python3 - <<'PY'
+import sys
+from urllib.parse import unquote
+print(unquote(sys.argv[1]))
+PY
+"${COVER_URL#file://}")
+
     if [[ -f "$LOCAL_PATH" ]]; then
+        persist_last_cover "$LOCAL_PATH"
         echo "$LOCAL_PATH"
         exit 0
     else
-        show_default_cover
+        show_last_or_default
     fi
 fi
 
@@ -49,17 +73,18 @@ if [ ! -f "$CACHED_COVER" ]; then
     curl -s -L --max-time 5 "$COVER_URL" -o "$CACHED_COVER"
     if [[ $? -ne 0 ]] || [[ ! -s "$CACHED_COVER" ]]; then
         rm -f "$CACHED_COVER"
-        show_default_cover
+        show_last_or_default
     fi
 fi
 
 # As a final sanity check, ensure the cached file is a valid image.
 # If not, remove the junk file and show the default cover.
 if file "$CACHED_COVER" | grep -qE 'image|jpeg|png|jpg|gif'; then
+    persist_last_cover "$CACHED_COVER"
     echo "$CACHED_COVER"
 else
     rm -f "$CACHED_COVER"
-    show_default_cover
+    show_last_or_default
 fi
 
 exit 0

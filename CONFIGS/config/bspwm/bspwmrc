@@ -21,7 +21,10 @@ vmware-user-suid-wrapper &
 /usr/bin/feh --bg-fill ~/Wallpapers/wallpapersden.com_huawei-4k-stock-abstract_2560x1440.jpg
 ~/.config/polybar/launch.sh --custom
 command -v eww >/dev/null && {
+	eww kill >/dev/null 2>&1 || true
 	eww daemon >/dev/null 2>&1
+	sleep 0.5
+	eww reload >/dev/null 2>&1 || true
 } &
 picom &
 #bspc config border_width 0

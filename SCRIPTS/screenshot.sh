@@ -1,6 +1,8 @@
 #! /bin/sh
 
-output=~/screenshots/%Y-%m-%d-%T-sc.png
+screens_dir="$HOME/screenshots"
+mkdir -p "$screens_dir"
+output="$screens_dir/%Y-%m-%d-%T-sc.png"
 
 case "$1" in
 	"select") scrot -s -q 100 -l mode=classic "$output" || exit ;;
@@ -8,4 +10,4 @@ case "$1" in
 	*) scrot "$output" || exit ;;
 esac
 
-notify-send "Screenshot taken."
+notify-send "Screenshot guardada" "$screens_dir"
