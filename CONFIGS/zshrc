@@ -1,6 +1,8 @@
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
+typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
+
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
@@ -313,6 +315,53 @@ if [ -f /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]; then
     ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#999'
 fi
 
+# Cargar plugins de Oh My Zsh desde el repositorio oficial
+# Mantener ssh-agent en modo lazy para evitar salida durante la inicialización de zsh
+zstyle ':omz:plugins:ssh-agent' lazy yes
+
+load_omz_plugin() {
+    local plugin="$1"
+    local plugin_file=""
+    local base_dir
+
+    for base_dir in "$HOME/.oh-my-zsh/plugins" "$HOME/.oh-my-zsh/custom/plugins"; do
+        plugin_file="$base_dir/$plugin/$plugin.plugin.zsh"
+        if [ -f "$plugin_file" ]; then
+            source "$plugin_file"
+            return 0
+        fi
+    done
+
+    return 1
+}
+
+OMZ_PLUGIN_LIST=(
+    extract
+    zoxide
+    fzf
+    fzf-tab
+    fancy-ctrl-z
+    sudo
+    colored-man-pages
+    tldr
+    encode64
+    nmap
+    ssh-agent
+    jsontools
+    systemd
+    copypath
+    copyfile
+    copybuffer
+    git
+    python
+    pip
+    zsh-interactive-cd
+)
+
+for plugin in "${OMZ_PLUGIN_LIST[@]}"; do
+    load_omz_plugin "$plugin"
+ done
+
 # enable command-not-found if installed
 if [ -f /etc/zsh_command_not_found ]; then
     . /etc/zsh_command_not_found
@@ -578,7 +627,12 @@ export FZF_CTRL_T_OPTS="--preview 'batcat --color=always --style=numbers --line-
 # Preview para Alt+C (cambiar directorio)
 export FZF_ALT_C_OPTS="--preview 'lsd -la --color=always {}'"
 
-# ═══════════════════════════════════════════════════════════════════════════
+# Configuración de fzf-tab
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'lsd -la --color=always $realpath'
+zstyle ':fzf-tab:complete:git-(add|diff|restore|switch|checkout):*' fzf-preview 'git diff $word || git status --short'
+zstyle ':fzf-tab:complete:(-command-|-parameter-|-brace-parameter-|export|unset|bindkey)::*' fzf-preview 'echo ${(P)word}'
+
+# ═══════════════════════════════════════════════════════════════════
 # CORRECCIÓN AUTOMÁTICA DE TYPOS
 # ═══════════════════════════════════════════════════════════════════════════
 

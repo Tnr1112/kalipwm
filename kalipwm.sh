@@ -319,8 +319,57 @@ else
     fail_step "No se pudo instalar Powerlevel10k"
 fi
 
-# Instalar plugins de zsh (en /usr/share como espera el zshrc de Kali)
-start_step "Instalar plugins de ZSH"
+# Asegurar que los plugins de Oh My Zsh estén disponibles y actualizar el repo oficial
+start_step "Actualizar plugins de Oh My Zsh"
+if [ -d "$HOME/.oh-my-zsh" ]; then
+    git -C "$HOME/.oh-my-zsh" pull --ff-only >> "$LOG_FILE" 2>&1 || true
+fi
+finish_step
+
+# Instalar plugins auxiliares si faltan
+start_step "Instalar plugins auxiliares"
+mkdir -p "$HOME/.oh-my-zsh/custom/plugins"
+if [ ! -f "$HOME/.oh-my-zsh/custom/plugins/zsh-interactive-cd/zsh-interactive-cd.plugin.zsh" ]; then
+    if safe_git_clone "https://github.com/changyuheng/zsh-interactive-cd.git" "$HOME/.oh-my-zsh/custom/plugins/zsh-interactive-cd"; then
+        info "zsh-interactive-cd instalado"
+    else
+        warning "No se pudo instalar zsh-interactive-cd"
+    fi
+fi
+if [ ! -f "$HOME/.oh-my-zsh/custom/plugins/fzf-tab/fzf-tab.plugin.zsh" ]; then
+    if safe_git_clone "https://github.com/Aloxaf/fzf-tab" "$HOME/.oh-my-zsh/custom/plugins/fzf-tab"; then
+        info "fzf-tab instalado"
+    else
+        warning "No se pudo instalar fzf-tab"
+    fi
+fi
+finish_step
+
+# Dependencias obligatorias para plugins de Oh My Zsh
+start_step "Instalar dependencias obligatorias"
+if sudo -n true >/dev/null 2>&1; then
+    for pkg in zoxide nmap; do
+        if apt-cache show "$pkg" >/dev/null 2>&1; then
+            if sudo apt install -y "$pkg" >> "$LOG_FILE" 2>&1; then
+                info "Paquete obligatorio instalado: $pkg"
+            else
+                error "No se pudo instalar el paquete obligatorio: $pkg"
+                fail_step "No se pudo instalar $pkg"
+            fi
+        else
+            error "Paquete obligatorio no disponible: $pkg"
+            fail_step "No se pudo encontrar $pkg"
+        fi
+    done
+    finish_step
+else
+    error "No hay sudo sin contraseña disponible; no se pueden instalar dependencias obligatorias"
+    fail_step "Sin sudo sin contraseña"
+    finish_step
+fi
+
+# Instalar plugins de sistema para zsh (en /usr/share como espera el zshrc de Kali)
+start_step "Instalar plugins de sistema de ZSH"
 # zsh-autosuggestions ya viene en Kali, pero verificamos
 if [ ! -f /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]; then
     sudo mkdir -p /usr/share/zsh-autosuggestions
