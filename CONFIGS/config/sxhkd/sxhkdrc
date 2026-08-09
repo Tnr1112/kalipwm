@@ -8,8 +8,31 @@ super + Return
 
 # program launcher
 super + d
-#	/usr/bin/rofi -show drun
 	/usr/bin/rofi -show drun -theme ~/.config/rofi/launchers/type-7/style-3.rasi
+
+# launchpad style app drawer
+super + shift + d
+	~/.config/scripts/launchpad.sh
+
+# clipboard history
+super + shift + v
+	~/.config/scripts/clipboard-history.sh
+
+# power menu
+super + shift + p
+	~/.config/polybar/scripts/powermenu_alt
+
+# network manager
+super + shift + n
+	~/.config/scripts/network-manager.sh
+
+# screenshots
+super + shift + s
+	~/.config/scripts/screenshot.sh select
+
+# scratchpad
+super + shift + grave
+	~/.config/scripts/scratchpad.sh
 
 # make sxhkd reload its configuration files:
 super + Escape

@@ -1,0 +1,85 @@
+configuration {
+    font: "Iosevka Nerd Font 12";
+    show-icons: true;
+    icon-theme: "Papirus";
+    display-drun: "";
+    drun-display-format: "{name}";
+    disable-history: false;
+    fullscreen: false;
+    sidebar-mode: false;
+    terminal: "/usr/bin/kitty";
+}
+
+* {
+    bg: #070b16;
+    bg-alt: #0f172a;
+    fg: #f8fafc;
+    fg-alt: #8bd5ff;
+    accent: #ff2fb6;
+    accent2: #28d7ff;
+    border: #3f2a67;
+    selected: #1c2746;
+}
+
+window {
+    transparency: "real";
+    background-color: @bg;
+    text-color: @fg;
+    border: 2px;
+    border-color: @accent2;
+    border-radius: 24px;
+    width: 36%;
+    height: 68%;
+}
+
+mainbox {
+    children: [inputbar, listview];
+    spacing: 10px;
+    padding: 14px;
+    background-color: transparent;
+}
+
+inputbar {
+    children: [prompt, entry];
+    background-color: @bg-alt;
+    border: 1px;
+    border-color: @accent;
+    border-radius: 16px;
+    padding: 10px 12px;
+}
+
+prompt, entry {
+    text-color: @fg;
+}
+
+entry {
+    placeholder: "Buscar apps";
+    blink: true;
+}
+
+listview {
+    spacing: 7px;
+    scrollbar: false;
+}
+
+element {
+    padding: 10px 12px;
+    border-radius: 14px;
+    background-color: transparent;
+}
+
+element selected {
+    background-color: @selected;
+    text-color: @fg;
+    border: 1px;
+    border-color: @accent2;
+}
+
+element-text {
+    text-color: inherit;
+}
+
+element-icon {
+    size: 24px;
+    margin: 0 8px 0 0;
+}

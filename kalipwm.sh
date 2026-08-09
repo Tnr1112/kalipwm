@@ -238,7 +238,7 @@ fi
 start_step "Instalar paquetes base"
 if safe_install git bspwm vim feh scrot scrub zsh rofi xclip xsel locate wmname acpi sxhkd \
     imagemagick ranger kitty tmux python3-pip font-manager lsd bpython open-vm-tools-desktop open-vm-tools fastfetch \
-    fd-find ripgrep tree ncdu htop libnotify-bin jq; then
+    fd-find ripgrep tree ncdu htop libnotify-bin jq network-manager i3lock xdotool; then
     finish_step
 else
     fail_step "Algunos paquetes no se instalaron"
@@ -527,6 +527,7 @@ start_step "Establecer permisos"
 chmod +x ~/.config/bspwm/bspwmrc
 chmod +x ~/.config/bspwm/scripts/bspwm_resize
 chmod +x ~/.config/polybar/launch.sh
+chmod +x ~/.config/polybar/scripts/*
 chmod +x ~/.config/scripts/*
 finish_step
 

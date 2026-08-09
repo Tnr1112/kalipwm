@@ -1,38 +1,44 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 
-
-rofi_command="rofi -theme $HOME/.config/polybar/scripts/themes/powermenu_alt.rasi"
-
-uptime=$(uptime -p | sed -e 's/up //g')
+rofi_command="rofi -theme $HOME/.config/rofi/launchers/type-7/style-3.rasi"
 
 # Options
-shutdown=" Shutdown"
-reboot=" Restart"
-lock=" Lock"
-suspend=" Sleep"
-logout=" Logout"
+shutdown="⏻ Shutdown"
+reboot="↻ Restart"
+lock="🔒 Lock"
+suspend="🌙 Suspend"
+logout="🚪 Logout"
 
-# Variable passed to rofi
 options="$lock\n$suspend\n$logout\n$reboot\n$shutdown"
 
-chosen="$(echo -e "$options" | $rofi_command -p "System" -dmenu -selected-row 0)"
-case $chosen in
-    $shutdown)
+chosen="$(printf '%b' "$options" | $rofi_command -p "System" -dmenu -selected-row 0)"
+
+case "$chosen" in
+    "$shutdown")
         systemctl poweroff
         ;;
-    $reboot)
+    "$reboot")
         systemctl reboot
         ;;
-    $lock)
-        i3lock
+    "$lock")
+        if command -v i3lock >/dev/null 2>&1; then
+            i3lock -c 111111
+        elif command -v loginctl >/dev/null 2>&1; then
+            loginctl lock-session
+        fi
         ;;
-    $suspend)
-        mpc -q pause
-        amixer set Master mute
+    "$suspend")
         systemctl suspend
         ;;
-    $logout)
-        openbox --exit
+    "$logout")
+        if command -v i3-msg >/dev/null 2>&1; then
+            i3-msg exit
+        elif command -v bspc >/dev/null 2>&1; then
+            bspc quit
+        else
+            pkill -u "$USER"
+        fi
         ;;
 esac
 
