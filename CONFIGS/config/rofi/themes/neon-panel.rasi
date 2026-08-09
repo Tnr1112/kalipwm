@@ -1,0 +1,62 @@
+* {
+    bg: #060816;
+    bg-alt: #111827;
+    fg: #F8FAFC;
+    fg-alt: #67E8F9;
+    accent: #FF2FB6;
+    accent2: #22D3EE;
+    border: #7C3AED;
+    selected: #16213E;
+}
+
+window {
+    width: 32%;
+    background-color: @bg;
+    border: 2px;
+    border-color: @accent2;
+    border-radius: 18px;
+}
+
+mainbox {
+    padding: 14px;
+    spacing: 10px;
+    children: [inputbar, listview];
+}
+
+inputbar {
+    padding: 10px 12px;
+    border-radius: 12px;
+    background-color: @bg-alt;
+    border: 1px;
+    border-color: @accent;
+}
+
+prompt, entry, textbox-prompt-colon {
+    text-color: @fg;
+}
+
+entry {
+    placeholder: "Choose an action";
+}
+
+listview {
+    spacing: 6px;
+    scrollbar: false;
+}
+
+element {
+    padding: 10px 12px;
+    border-radius: 12px;
+    background-color: transparent;
+}
+
+element selected {
+    background-color: @selected;
+    text-color: @fg;
+    border: 1px;
+    border-color: @accent2;
+}
+
+element-text, element-icon {
+    text-color: inherit;
+}

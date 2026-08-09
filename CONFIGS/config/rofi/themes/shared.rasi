@@ -1,0 +1,19 @@
+/* Shared neon palette for the Rofi menus. Individual layouts import this file. */
+configuration {
+    font: "Iosevka Nerd Font 12";
+    show-icons: true;
+    icon-theme: "Papirus";
+    terminal: "/usr/bin/kitty";
+}
+
+* {
+    background: #070812;
+    background-alt: #111326;
+    foreground: #F5F3FF;
+    muted: #A5B4FC;
+    fuchsia: #FF2FB6;
+    cyan: #22D3EE;
+    violet: #8B5CF6;
+    selected: #1B1640;
+    urgent: #FB7185;
+}

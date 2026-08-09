@@ -23,5 +23,5 @@ polybar primary -c ~/.config/polybar/current.ini &
 polybar battery -c ~/.config/polybar/current.ini &
 #polybar bluetooth -c ~/.config/polybar/current.ini &
 
-## Center bar
-polybar primary -c ~/.config/polybar/workspace.ini &
+## Workspace bar (distinct from current.ini's system-menu "primary" bar)
+polybar workspaces -c ~/.config/polybar/workspace.ini &

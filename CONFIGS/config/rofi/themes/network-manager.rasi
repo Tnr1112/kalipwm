@@ -1,0 +1,15 @@
+/* Based on the NetManagerDM layout from gh0stzk/dotfiles. */
+@import "shared.rasi"
+
+window { location: north; anchor: north; width: 32%; height: 36%; y-offset: 7%; background-color: @background; border: 2px; border-color: @fuchsia; border-radius: 12px; }
+mainbox { spacing: 10px; padding: 16px; background-color: transparent; children: [ "inputbar", "message", "listview" ]; }
+inputbar { spacing: 10px; background-color: transparent; text-color: @foreground; children: [ "prompt", "entry" ]; }
+prompt { padding: 9px 13px; background-color: @cyan; text-color: @background; border-radius: 8px; }
+entry, message { padding: 9px 12px; background-color: @background-alt; text-color: @foreground; border: 1px; border-color: @violet; border-radius: 8px; }
+entry { placeholder: "Filtrar redes"; placeholder-color: @muted; }
+listview { columns: 1; lines: 8; cycle: true; dynamic: true; spacing: 5px; scrollbar: true; background-color: transparent; }
+scrollbar { handle-width: 5px; handle-color: @cyan; background-color: @background-alt; }
+element { padding: 9px 11px; background-color: transparent; text-color: @foreground; border-radius: 8px; }
+element selected.normal { background-color: @selected; text-color: @foreground; border: 1px; border-color: @fuchsia; }
+element-text { background-color: transparent; text-color: inherit; highlight: @cyan; }
+message { margin: 0px; }
