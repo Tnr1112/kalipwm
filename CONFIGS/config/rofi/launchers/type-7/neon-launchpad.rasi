@@ -1,85 +1,24 @@
+/* App drawer layout based on the complete Rofi layouts in gh0stzk/dotfiles. */
+@import "../../themes/shared.rasi"
+
 configuration {
-    font: "Iosevka Nerd Font 12";
     show-icons: true;
     icon-theme: "Papirus";
-    display-drun: "";
+    display-drun: "Apps";
     drun-display-format: "{name}";
-    disable-history: false;
-    fullscreen: false;
-    sidebar-mode: false;
-    terminal: "/usr/bin/kitty";
-}
-
-* {
-    bg: #060816;
-    bg-alt: #0F172A;
-    fg: #F8FAFC;
-    fg-alt: #67E8F9;
-    accent: #FF2FB6;
-    accent2: #22D3EE;
-    border: #7C3AED;
-    selected: #111C3A;
 }
 
 window {
-    transparency: "real";
-    background-color: @bg;
-    text-color: @fg;
-    border: 2px;
-    border-color: @accent2;
-    border-radius: 24px;
-    width: 36%;
+    width: 38%;
     height: 68%;
-}
-
-mainbox {
-    children: [inputbar, listview];
-    spacing: 10px;
-    padding: 14px;
-    background-color: transparent;
-}
-
-inputbar {
-    children: [prompt, entry];
-    background-color: @bg-alt;
-    border: 1px;
-    border-color: @accent;
-    border-radius: 16px;
-    padding: 10px 12px;
-}
-
-prompt, entry {
-    text-color: @fg;
-}
-
-entry {
-    placeholder: "Buscar apps";
-    blink: true;
-}
-
-listview {
-    spacing: 7px;
-    scrollbar: false;
-}
-
-element {
-    padding: 10px 12px;
+    border-color: @cyan;
     border-radius: 14px;
-    background-color: transparent;
 }
 
-element selected {
-    background-color: @selected;
-    text-color: @fg;
-    border: 1px;
-    border-color: @accent2;
-}
-
-element-text {
-    text-color: inherit;
-}
-
-element-icon {
-    size: 24px;
-    margin: 0 8px 0 0;
-}
+mainbox { padding: 16px; children: [ "inputbar", "listview" ]; }
+prompt { background-color: @fuchsia; }
+entry { placeholder: "Buscar aplicaciones"; }
+listview { lines: 10; spacing: 6px; }
+element { padding: 10px 12px; }
+element selected.normal { background-color: @selected; border-color: @fuchsia; }
+element-icon { size: 24px; }

@@ -17,3 +17,31 @@ configuration {
     selected: #1B1640;
     urgent: #FB7185;
 }
+
+/* Complete widget defaults. This prevents Rofi from mixing its light default
+ * element styles with a custom neon window theme. */
+window {
+    location: center;
+    anchor: center;
+    width: 42%;
+    background-color: @background;
+    text-color: @foreground;
+    border: 2px;
+    border-color: @cyan;
+    border-radius: 12px;
+}
+mainbox { spacing: 10px; padding: 16px; background-color: transparent; children: [ "inputbar", "message", "listview" ]; }
+inputbar { spacing: 10px; background-color: transparent; text-color: @foreground; children: [ "prompt", "entry" ]; }
+prompt { padding: 9px 13px; background-color: @fuchsia; text-color: @background; border-radius: 8px; }
+entry { padding: 9px 12px; background-color: @background-alt; text-color: @foreground; placeholder-color: @muted; border: 1px; border-color: @violet; border-radius: 8px; }
+message { margin: 0px; padding: 9px 12px; background-color: @background-alt; text-color: @foreground; border: 1px; border-color: @violet; border-radius: 8px; }
+listview { columns: 1; lines: 8; cycle: true; dynamic: true; spacing: 5px; scrollbar: true; background-color: transparent; text-color: @foreground; }
+scrollbar { handle-width: 5px; handle-color: @fuchsia; background-color: @background-alt; }
+element { padding: 9px 11px; background-color: transparent; text-color: @foreground; border-radius: 8px; }
+element normal.normal, element alternate.normal { background-color: transparent; text-color: @foreground; }
+element normal.urgent { background-color: @urgent; text-color: @background; }
+element normal.active { background-color: @cyan; text-color: @background; }
+element selected.normal { background-color: @selected; text-color: @foreground; border: 1px; border-color: @cyan; }
+element selected.urgent { background-color: @urgent; text-color: @background; }
+element selected.active { background-color: @fuchsia; text-color: @background; }
+element-text, element-icon { background-color: transparent; text-color: inherit; highlight: inherit; }
