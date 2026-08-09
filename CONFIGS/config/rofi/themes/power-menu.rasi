@@ -1,0 +1,13 @@
+/* Five-button power menu based on gh0stzk's PowerMenu.rasi. */
+@import "shared.rasi"
+
+configuration { show-icons: false; hover-select: true; }
+window { width: 50%; height: 0px; border: 0px; border-radius: 0px; }
+mainbox { spacing: 15px; padding: 30px; background-color: @background; children: [ "inputbar", "listview" ]; }
+inputbar { spacing: 15px; children: [ "prompt", "message" ]; }
+prompt { padding: 12px; background-color: @cyan; }
+message { padding: 12px; border: 0px; border-radius: 0px; background-color: @background-alt; }
+listview { columns: 5; lines: 1; fixed-columns: true; fixed-height: true; spacing: 15px; scrollbar: false; }
+element { padding: 34px 10px; border: 1px; border-radius: 6px; border-color: @violet; background-color: @background-alt; }
+element-text { font: "Iosevka Nerd Font 30"; horizontal-align: 0.5; vertical-align: 0.5; }
+element selected.normal { background-color: @fuchsia; text-color: @background; border-color: @fuchsia; }

@@ -6,10 +6,18 @@ THEME="${ROFI_THEME:-$HOME/.config/rofi/themes/clipboard.rasi}"
 if command -v clipmenu >/dev/null 2>&1 && command -v xdotool >/dev/null 2>&1; then
     # clipmenu copies the selected history entry to the PRIMARY selection. Once
     # Rofi closes, focus returns to the previous window and Shift+Insert pastes it.
+    pgrep -x clipmenud >/dev/null 2>&1 || clipmenud >/dev/null 2>&1 &
+    sleep 0.2
     if CM_LAUNCHER="rofi -dmenu -i -theme \"$THEME\"" clipmenu -p "Clipboard"; then
         xdotool key --clearmodifiers Shift+Insert
     else
-        notify-send "Clipboard" "clipmenu no pudo abrir el historial" 2>/dev/null || true
+        value=$(xclip -selection clipboard -o 2>/dev/null || true)
+        if [ -n "$value" ]; then
+            printf '%s\n' "Paste current clipboard" | rofi -dmenu -i -theme "$THEME" -p "Clipboard" >/dev/null && \
+                printf '%s' "$value" | xdotool type --clearmodifiers --file -
+        else
+            notify-send "Clipboard" "El historial está vacío: copia texto y vuelve a abrirlo" 2>/dev/null || true
+        fi
     fi
     exit 0
 fi

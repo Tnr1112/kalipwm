@@ -1,7 +1,7 @@
 /* Based on the NetManagerDM layout from gh0stzk/dotfiles. */
 @import "shared.rasi"
 
-window { location: north; anchor: north; width: 32%; height: 36%; y-offset: 7%; background-color: @background; border: 2px; border-color: @fuchsia; border-radius: 12px; }
+window { location: north; anchor: north; width: 28%; height: 32%; x-offset: 30%; y-offset: 7%; background-color: @background; border: 0px; border-radius: 8px; }
 mainbox { spacing: 10px; padding: 16px; background-color: transparent; children: [ "inputbar", "message", "listview" ]; }
 inputbar { spacing: 10px; background-color: transparent; text-color: @foreground; children: [ "prompt", "entry" ]; }
 prompt { padding: 9px 13px; background-color: @cyan; text-color: @background; border-radius: 8px; }

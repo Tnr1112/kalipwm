@@ -1,18 +1,18 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-rofi_command="rofi -theme $HOME/.config/rofi/launchers/type-7/neon-launchpad.rasi"
+rofi_command="rofi -theme $HOME/.config/rofi/themes/power-menu.rasi"
 
 # Options
-shutdown="⏻ Shutdown"
-reboot="↻ Restart"
-lock="🔒 Lock"
-suspend="🌙 Suspend"
-logout="🚪 Logout"
+shutdown="⏻"
+reboot="↻"
+lock=""
+suspend=""
+logout=""
 
 options="$lock\n$suspend\n$logout\n$reboot\n$shutdown"
 
-chosen="$(printf '%b' "$options" | $rofi_command -p "System" -dmenu -selected-row 0)"
+chosen="$(printf '%b' "$options" | $rofi_command -p "Goodbye $USER" -mesg "Uptime: $(uptime -p | sed 's/up //')" -dmenu -selected-row 0)"
 
 case "$chosen" in
     "$shutdown")

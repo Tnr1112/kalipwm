@@ -1,24 +1,15 @@
-/* App drawer layout based on the complete Rofi layouts in gh0stzk/dotfiles. */
+/* Three-column launcher layout based on gh0stzk's style_1.rasi. */
 @import "../../themes/shared.rasi"
 
-configuration {
-    show-icons: true;
-    icon-theme: "Papirus";
-    display-drun: "Apps";
-    drun-display-format: "{name}";
-}
-
-window {
-    width: 38%;
-    height: 68%;
-    border-color: @cyan;
-    border-radius: 14px;
-}
-
-mainbox { padding: 16px; children: [ "inputbar", "listview" ]; }
-prompt { background-color: @fuchsia; }
-entry { placeholder: "Buscar aplicaciones"; }
-listview { lines: 10; spacing: 6px; }
-element { padding: 10px 12px; }
-element selected.normal { background-color: @selected; border-color: @fuchsia; }
+configuration { modi: "drun"; icon-theme: "Papirus-Dark"; show-icons: true; drun-display-format: "{name}"; disable-history: true; hover-select: true; }
+window { width: 550px; height: 0px; location: center; anchor: center; border-radius: 6px; }
+mainbox { spacing: 0px; padding: 0px; background-color: transparent; children: [ "inputbar", "listbox" ]; }
+listbox { spacing: 10px; padding: 15px; background-color: transparent; children: [ "listview" ]; }
+inputbar { spacing: 10px; padding: 20px 24px; background-color: transparent; children: [ "prompt", "entry" ]; }
+prompt { padding: 12px 16px; background-color: @fuchsia; }
+entry { padding: 12px; placeholder: "Buscar aplicaciones"; }
+listview { columns: 3; lines: 5; fixed-columns: true; fixed-height: true; spacing: 4px; scrollbar: false; }
+element { spacing: 10px; padding: 9px; border-radius: 4px; }
+element selected.normal { background-color: @selected; text-color: @foreground; border: 0px; }
 element-icon { size: 24px; }
+element-text { vertical-align: 0.5; horizontal-align: 0.0; }
