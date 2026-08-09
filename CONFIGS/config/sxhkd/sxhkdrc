@@ -8,7 +8,7 @@ super + Return
 
 # program launcher
 super + d
-	/usr/bin/rofi -show drun -theme ~/.config/rofi/launchers/type-7/style-3.rasi
+	/usr/bin/rofi -show drun -theme ~/.config/rofi/launchers/type-7/neon-launchpad.rasi
 
 # launchpad style app drawer
 super + shift + d

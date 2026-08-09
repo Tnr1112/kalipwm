@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-rofi_command="rofi -theme $HOME/.config/rofi/launchers/type-7/style-3.rasi"
+rofi_command="rofi -theme $HOME/.config/rofi/launchers/type-7/neon-launchpad.rasi"
 
 # Options
 shutdown="⏻ Shutdown"

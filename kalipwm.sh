@@ -511,7 +511,9 @@ finish_step
 
 # Copiar todos los archivos de configuración
 start_step "Copiar configuraciones"
+mkdir -p ~/.config/rofi/launchers/type-7
 cp -rv $RPATH/CONFIGS/config/* ~/.config/ >> "$LOG_FILE" 2>&1
+cp -v "$RPATH/CONFIGS/config/rofi/launchers/type-7/neon-launchpad.rasi" ~/.config/rofi/launchers/type-7/neon-launchpad.rasi >> "$LOG_FILE" 2>&1
 
 # Copiar scripts
 mkdir -p ~/.config/scripts
