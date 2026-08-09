@@ -11,14 +11,14 @@ configuration {
 }
 
 * {
-    bg: #070b16;
-    bg-alt: #0f172a;
-    fg: #f8fafc;
-    fg-alt: #8bd5ff;
-    accent: #ff2fb6;
-    accent2: #28d7ff;
-    border: #3f2a67;
-    selected: #1c2746;
+    bg: #060816;
+    bg-alt: #0F172A;
+    fg: #F8FAFC;
+    fg-alt: #67E8F9;
+    accent: #FF2FB6;
+    accent2: #22D3EE;
+    border: #7C3AED;
+    selected: #111C3A;
 }
 
 window {
