@@ -343,6 +343,13 @@ if [ ! -f "$HOME/.oh-my-zsh/custom/plugins/fzf-tab/fzf-tab.plugin.zsh" ]; then
         warning "No se pudo instalar fzf-tab"
     fi
 fi
+if [ ! -f "$HOME/.oh-my-zsh/custom/plugins/zsh-completions/zsh-completions.plugin.zsh" ]; then
+    if safe_git_clone "https://github.com/zsh-users/zsh-completions" "$HOME/.oh-my-zsh/custom/plugins/zsh-completions"; then
+        info "zsh-completions instalado"
+    else
+        warning "No se pudo instalar zsh-completions"
+    fi
+fi
 finish_step
 
 # Dependencias obligatorias para plugins de Oh My Zsh
