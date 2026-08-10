@@ -1,0 +1,92 @@
+/**
+ * Rofi Powermenu Configuration (gh0stzk/dotfiles)
+ * Repository: kalipwm (branch: design_changes)
+ **/
+
+@import "colors.rasi"
+
+configuration {
+    show-icons:                 false;
+}
+
+window {
+    transparency:               "real";
+    location:                   center;
+    anchor:                     center;
+    fullscreen:                 false;
+    width:                      800px;
+    x-offset:                   0px;
+    y-offset:                   0px;
+    padding:                    20px;
+    border:                     1px solid;
+    border-radius:              8px;
+    border-color:               #ff2cf1;
+    background-color:           @background;
+}
+
+mainbox {
+    background-color:           transparent;
+    spacing:                    15px;
+    children:                   [ "inputbar", "listview" ];
+}
+
+inputbar {
+    spacing:                    10px;
+    padding:                    10px;
+    border-radius:              4px;
+    background-color:           transparent;
+    text-color:                 @foreground;
+    children:                   [ "textbox-prompt-colon", "prompt" ];
+}
+
+textbox-prompt-colon {
+    expand:                     false;
+    str:                        "⏻";
+    padding:                    8px 12px;
+    border-radius:              4px;
+    background-color:           #ff5555;
+    text-color:                 #000000;
+}
+
+prompt {
+    padding:                    8px 16px;
+    border-radius:              4px;
+    background-color:           #50fa7b;
+    text-color:                 #000000;
+    font:                       "JetBrainsMono Nerd Font 10 Bold 10";
+}
+
+listview {
+    columns:                    5;
+    lines:                      1;
+    spacing:                    15px;
+    cycle:                      true;
+    dynamic:                    true;
+    scrollbar:                  false;
+    layout:                     vertical;
+    background-color:           transparent;
+}
+
+element {
+    padding:                    25px 0px;
+    border:                     1px solid;
+    border-radius:              6px;
+    border-color:               #333339;
+    background-color:           #151518;
+    text-color:                 @foreground;
+    cursor:                     pointer;
+}
+
+element selected.normal {
+    background-color:           #ff2cf1;
+    text-color:                 #000000;
+    border-color:               #00f0ff;
+}
+
+element-text {
+    font:                       "Feather 24";
+    horizontal-align:           0.5;
+    vertical-align:             0.5;
+    background-color:           transparent;
+    text-color:                 inherit;
+}

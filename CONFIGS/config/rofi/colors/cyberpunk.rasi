@@ -1,0 +1,16 @@
+/**
+ * KaliPWM Neon Fuchsia & Celeste Theme for Rofi
+ * Origin: gh0stzk/dotfiles adapted for Tnr1112/kalipwm (design_changes)
+ **/
+
+* {
+    background:     #0a0a0cEE;
+    background-alt: #141417;
+    foreground:     #ffffff;
+    selected:       #ff2cf1;
+    selected-fg:    #000000;
+    active:         #00f0ff;
+    urgent:         #ff3366;
+    border-color:   #ff2cf1;
+    border-alt:     #00f0ff;
+}

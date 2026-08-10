@@ -65,6 +65,9 @@ WORDCHARS=${WORDCHARS//\/} # Don't consider certain characters part of the word
 
 # hide EOL sign ('%')
 PROMPT_EOL_MARK=""
+autoload -U colors && colors
+PROMPT='%F{201}┌──(%F{51}%n@%m%F{201})-[%F{255}%~%F{201}]
+└─%F{51}#%f '
 
 # configure key keybindings
 bindkey -e                                        # emacs key bindings
@@ -74,6 +77,8 @@ bindkey '^[[3;5~' kill-word                       # ctrl + Supr
 bindkey '^[[3~' delete-char                       # delete
 bindkey '^[[1;5C' forward-word                    # ctrl + ->
 bindkey '^[[1;5D' backward-word                   # ctrl + <-
+bindkey '^[^[[D' backward-word
+bindkey '^[^[[C' forward-word
 bindkey '^[[5~' beginning-of-buffer-or-history    # page up
 bindkey '^[[6~' end-of-buffer-or-history          # page down
 bindkey '^[[H' beginning-of-line                  # home
@@ -83,6 +88,8 @@ bindkey '^[[Z' undo                               # shift + tab undo last action
 #bindkey '^[[1;3D' backward-word                   # alt + <-
 bindkey '^H' backward-kill-word                   #ctrl + backspace
 bindkey '^[[3;3~' kill-word                       #alt + supr
+bindkey '^?' backward-delete-char
+
 
 # Use modern completion system
 autoload -Uz compinit
@@ -108,8 +115,8 @@ zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 
 # History configurations
 HISTFILE=~/.zsh_history
-HISTSIZE=1000
-SAVEHIST=2000
+HISTSIZE=10000
+SAVEHIST=20000
 setopt hist_expire_dups_first # delete duplicates first when HISTFILE size exceeds HISTSIZE
 setopt hist_ignore_dups       # ignore duplicated commands history list
 setopt hist_ignore_space      # ignore commands that start with space
@@ -134,6 +141,8 @@ fi
 case "$TERM" in
     xterm-color|*-256color) color_prompt=yes;;
 esac
+export COLORTERM="truecolor"
+
 
 # uncomment for a colored prompt, if the terminal has the capability; turned
 # off by default to not distract the user: the focus in a terminal window

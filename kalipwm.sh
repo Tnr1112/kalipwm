@@ -5,6 +5,8 @@
 # ║              Entorno de hacking profesional para Kali                    ║
 # ╚══════════════════════════════════════════════════════════════════════════╝
 
+set -e
+
 # Colores para output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -15,6 +17,10 @@ MAGENTA='\033[0;35m'
 BOLD='\033[1m'
 DIM='\033[2m'
 RESET='\033[0m'
+RCol='\e[0m'
+Gre='\e[1;32m'
+Fus='\e[1;35m'
+Cya='\e[1;36m'
 
 # ═══════════════════════════════════════════════════════════════════════════
 # SISTEMA DE LOG Y ERRORES
@@ -238,7 +244,7 @@ fi
 start_step "Instalar paquetes base"
 if safe_install git bspwm vim feh scrot scrub zsh rofi xclip xsel locate wmname acpi sxhkd \
     imagemagick ranger kitty tmux python3-pip font-manager lsd bpython open-vm-tools-desktop open-vm-tools fastfetch \
-    fd-find ripgrep tree ncdu htop libnotify-bin jq network-manager i3lock xdotool; then
+    fd-find ripgrep tree ncdu htop libnotify-bin jq network-manager i3lock xdotool dunst; then
     finish_step
 else
     fail_step "Algunos paquetes no se instalaron"
@@ -511,9 +517,26 @@ finish_step
 
 # Copiar todos los archivos de configuración
 start_step "Copiar configuraciones"
+mkdir -p ~/.config/bspwm
+mkdir -p ~/.config/picom
+mkdir -p ~/.config/dunst
+mkdir -p ~/.config/polybar
+mkdir -p ~/.config/kitty
+mkdir -p ~/.config/rofi/launchers/type-1
 mkdir -p ~/.config/rofi/launchers/type-7
-cp -rv $RPATH/CONFIGS/config/* ~/.config/ >> "$LOG_FILE" 2>&1
-cp -v "$RPATH/CONFIGS/config/rofi/launchers/type-7/neon-launchpad.rasi" ~/.config/rofi/launchers/type-7/neon-launchpad.rasi >> "$LOG_FILE" 2>&1
+mkdir -p ~/.config/rofi/powermenu/type-1
+mkdir -p ~/.config/rofi/applets/type-1
+mkdir -p ~/.config/rofi/launchers/type-7
+if [ -d "$RPATH/CONFIGS/config" ]; then
+    cp -rv "$RPATH/CONFIGS/config/"* ~/.config/ >> "$LOG_FILE" 2>&1 || true
+elif [ -d "$RPATH/CONFIGS" ]; then
+    cp -rv "$RPATH/CONFIGS/"* ~/.config/ >> "$LOG_FILE" 2>&1 || true
+fi
+#cp -rv $RPATH/CONFIGS/config/* ~/.config/ >> "$LOG_FILE" 2>&1
+
+# Copiado de archivos raíz (.zshrc y .Xresources)
+[ -f "$RPATH/CONFIGS/.zshrc" ] && cp -v "$RPATH/CONFIGS/.zshrc" ~/.zshrc >> "$LOG_FILE" 2>&1 || true
+[ -f "$RPATH/CONFIGS/.Xresources" ] && cp -v "$RPATH/CONFIGS/.Xresources" ~/.Xresources >> "$LOG_FILE" 2>&1 || true
 
 # Copiar scripts
 mkdir -p ~/.config/scripts
@@ -531,6 +554,13 @@ chmod +x ~/.config/bspwm/scripts/bspwm_resize
 chmod +x ~/.config/polybar/launch.sh
 chmod +x ~/.config/polybar/scripts/*
 chmod +x ~/.config/scripts/*
+chmod +x ~/.config/bspwm/bspwmrc 2>/dev/null || true
+chmod +x ~/.config/polybar/launch.sh 2>/dev/null || true
+chmod +x ~/.config/rofi/launchers/type-1/launcher.sh 2>/dev/null || true
+chmod +x ~/.config/rofi/powermenu/type-1/powermenu.sh 2>/dev/null || true
+if command -v xrdb &>/dev/null && [ -f "$HOME/.Xresources" ]; then
+    xrdb -merge "$HOME/.Xresources"
+fi
 finish_step
 
 # ═══════════════════════════════════════════════════════════════════════════

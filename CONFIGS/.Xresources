@@ -1,0 +1,28 @@
+! ==============================================================================
+!  Xresources Terminal Color Scheme - KaliPWM Neon Fuchsia & Celeste
+!  Repository: Tnr1112/kalipwm (branch: design_changes)
+! ==============================================================================
+
+*background: #0a0a0c
+*foreground: #ffffff
+*cursorColor: #ff2cf1
+
+! Normal Colors
+*color0: #141417
+*color1: #ff3366
+*color2: #50fa7b
+*color3: #f1fa8c
+*color4: #00f0ff
+*color5: #ff2cf1
+*color6: #00f0ff
+*color7: #f8f8f2
+
+! Bright Colors
+*color8: #6272a4
+*color9: #ff6e6e
+*color10: #69ff94
+*color11: #ffffa5
+*color12: #38bdf8
+*color13: #ff60f6
+*color14: #80f4ff
+*color15: #ffffff
