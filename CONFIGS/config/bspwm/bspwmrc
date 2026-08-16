@@ -25,3 +25,30 @@ picom &
 wmname LG3D &
 flameshot &
 clipmenud &
+
+# BSPWM Geometry & Border Configuration
+bspc config border_width         2
+bspc config window_gap           10
+bspc config split_ratio          0.52
+
+# Neon Color Scheme
+bspc config focused_border_color "#ff00ee"
+bspc config normal_border_color  "#141417"
+bspc config active_border_color  "#00f0ff"
+bspc config presel_feedback_color "#ff2cf1"
+
+# Monocle & Tiling Rules
+bspc config borderless_monocle   true
+bspc config gapless_monocle      true
+bspc config paddingless_monocle  true
+bspc config single_monocle       false
+
+# Window Rules
+bspc rule -a Firefox desktop='^2' follow=on
+bspc rule -a Code desktop='^3' follow=on
+bspc rule -a Discord desktop='^4'
+bspc rule -a Spotify desktop='^5'
+bspc rule -a BurpSuitePro desktop='^7'
+bspc rule -a Rofi state=floating
+bspc rule -a Pavucontrol state=floating
+bspc rule -a Feh state=floating
