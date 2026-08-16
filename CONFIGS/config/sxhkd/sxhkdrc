@@ -148,4 +148,4 @@ super + shift + b
 
 # Clipboard history
 super + v
-	clipmenu | xdotool key Shift+Insert
+	~/.config/scripts/clipboard-paste.sh

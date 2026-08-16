@@ -470,23 +470,13 @@ else
     fail_step "Error compilando Picom (ver: $LOG_FILE)"
 fi
 
-# Dependencias para clipmenu
-start_step "Instalar clipmenu"
-if safe_install libxfixes-dev; then
-    cd /tmp
-    rm -rf clipmenu
-    if safe_git_clone "https://github.com/cdown/clipmenu" "/tmp/clipmenu"; then
-        cd clipmenu
-        sudo make install >> "$LOG_FILE" 2>&1
-        cd ..
-        rm -rf clipmenu
-        finish_step
-    else
-        fail_step "No se pudo clonar clipmenu"
-    fi
-else
-    fail_step "No se pudieron instalar dependencias de clipmenu"
-fi
+# Instalar clipcat
+start_step "Instalar clipcat"
+export CLIPCAT_VERSION=$(basename $(curl -s -w %{redirect_url} https://github.com/xrelkd/clipcat/releases/latest))
+curl -s -L -O https://github.com/xrelkd/clipcat/releases/download/${CLIPCAT_VERSION}/clipcat_${CLIPCAT_VERSION#v}_amd64.deb
+sudo dpkg -i clipcat_${CLIPCAT_VERSION#v}_amd64.deb
+rm clipcat_${CLIPCAT_VERSION#v}_amd64.deb
+finish_step
 
 # ghidra
 start_step "Instalar herramientas adicionales"
