@@ -519,6 +519,7 @@ chmod +x ~/.config/bspwm/scripts/bspwm_resize
 chmod +x ~/.config/polybar/launch.sh
 chmod +x ~/.config/polybar/scripts/*
 chmod +x ~/.config/scripts/*
+clipcatd default-config > ~/.config/clipcat/clipcatd.toml
 finish_step
 
 # ═══════════════════════════════════════════════════════════════════════════
