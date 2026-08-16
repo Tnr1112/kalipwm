@@ -9,7 +9,8 @@ super + Return
 # program launcher
 super + d
 #	/usr/bin/rofi -show drun
-	/usr/bin/rofi -show drun -theme ~/.config/rofi/launchers/type-7/style-3.rasi
+#	/usr/bin/rofi -show drun -theme ~/.config/rofi/launchers/type-7/style-3.rasi
+	~/.config/polybar/scripts/launcher
 
 # make sxhkd reload its configuration files:
 super + Escape

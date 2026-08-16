@@ -527,6 +527,7 @@ start_step "Establecer permisos"
 chmod +x ~/.config/bspwm/bspwmrc
 chmod +x ~/.config/bspwm/scripts/bspwm_resize
 chmod +x ~/.config/polybar/launch.sh
+chmod +x ~/.config/polybar/scripts/*
 chmod +x ~/.config/scripts/*
 finish_step
 
