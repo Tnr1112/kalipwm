@@ -1,38 +1,28 @@
-#!/bin/bash
+#!/bin/sh
 
+_options="󰍁|Lock
+|Suspend
+󰗽|Logout
+󰜉|Reboot
+󰐥|Poweroff"
 
-rofi_command="rofi -theme $HOME/.config/polybar/scripts/themes/powermenu_alt.rasi"
+rofi_cmd() {
+	rofi -dmenu \
+		-p "Goodbye ${USER}" \
+		-mesg "Uptime: $(uptime -p | sed -e 's/up //g')" \
+		-theme "$HOME"/.config/rofi/themes/powermenu.rasi
+}
 
-uptime=$(uptime -p | sed -e 's/up //g')
+selected=$(printf '%s\n' "$_options" | cut -d'|' -f1 | rofi_cmd)
 
-# Options
-shutdown=" Shutdown"
-reboot=" Restart"
-lock=" Lock"
-suspend=" Sleep"
-logout=" Logout"
+if [ -n "$selected" ]; then
+    chosen=$(printf '%s\n' "$_options" | awk -F'|' -v sel="$selected" '$1 == sel {print $2}')
 
-# Variable passed to rofi
-options="$lock\n$suspend\n$logout\n$reboot\n$shutdown"
-
-chosen="$(echo -e "$options" | $rofi_command -p "System" -dmenu -selected-row 0)"
-case $chosen in
-    $shutdown)
-        systemctl poweroff
-        ;;
-    $reboot)
-        systemctl reboot
-        ;;
-    $lock)
-        i3lock
-        ;;
-    $suspend)
-        mpc -q pause
-        amixer set Master mute
-        systemctl suspend
-        ;;
-    $logout)
-        openbox --exit
-        ;;
-esac
-
+    case $chosen in
+        "Lock") ScreenLocker ;;
+        "Suspend") systemctl suspend ;;
+        "Logout") bspc quit ;;
+        "Reboot") systemctl reboot ;;
+        "Poweroff") systemctl poweroff ;;
+    esac
+fi

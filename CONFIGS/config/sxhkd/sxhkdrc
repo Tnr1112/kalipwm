@@ -149,3 +149,6 @@ super + shift + b
 # Clipboard history
 super + v
 	~/.config/scripts/clipboard-paste.sh
+
+super + j
+	~/.config/polybar/scripts/powermenu_alt
