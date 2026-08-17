@@ -32,6 +32,31 @@ bindkey '^[[Z' undo
 bindkey '^H' backward-kill-word
 bindkey '^[[3;3~' kill-word
 
+# Terminal keybindings
+# Ejecución y Autocompletado
+bindkey '\ej' accept-line                    # Alt + j : Enter (ejecutar comando) 
+bindkey '\e ' expand-or-complete             # Alt + Espacio : Tab alternativo
+
+# Movimiento del cursor (sin sacar las manos del reposo)
+bindkey '\eh' backward-char                  # Alt + h : Mover a la izquierda (←)
+bindkey '\el' forward-char                   # Alt + l : Mover a la derecha (→)
+bindkey '\ek' up-line-or-history             # Alt + k : Historial arriba (↑)
+bindkey '\em' down-line-or-history           # Alt + m : Historial abajo (↓)
+bindkey '\eu' backward-word                  # Alt + u : Palabra anterior
+bindkey '\eo' forward-word                   # Alt + o : Palabra siguiente
+bindkey '\ea' beginning-of-line              # Alt + a : Ir al inicio de la línea (Home)
+bindkey '\ee' end-of-line                    # Alt + e : Ir al final de la línea (End)
+bindkey '\es' end-of-line
+
+# Borrado y Edición (sin tocar Backspace ni Supr)
+bindkey '\ed' backward-delete-char           # Alt + d : Backspace (borra carácter anterior)
+bindkey '\ef' delete-char                    # Alt + f : Supr (borra carácter bajo el cursor)
+bindkey '\ew' backward-kill-word             # Alt + w : Borrar palabra completa hacia atrás
+bindkey '\eq' kill-word
+bindkey '\ek' kill-line                      # Alt + k : Borrar hasta el final de la línea
+bindkey '\eD' backward-kill-line
+bindkey '\ez' undo
+
 # History
 HISTFILE=~/.zsh_history
 HISTSIZE=1000
