@@ -510,6 +510,7 @@ cp -rv $RPATH/SCRIPTS/* ~/.config/scripts/ >> "$LOG_FILE" 2>&1
 # Copiar wallpapers
 mkdir -p ~/Wallpapers/
 cp -rv $RPATH/WALLPAPERS/* ~/Wallpapers/ >> "$LOG_FILE" 2>&1
+convert ~/Wallpapers/wallpapersden.com_abstract-liquid-8k-cool-art_2560x1440.jpg -resize 760x180^ -gravity center -extent 760x180 ~/.config/rofi/banner.png
 finish_step
 
 # Establecer permisos de ejecución

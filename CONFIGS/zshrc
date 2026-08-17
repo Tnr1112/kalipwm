@@ -36,6 +36,7 @@ bindkey '^[[3;3~' kill-word
 # Ejecución y Autocompletado
 bindkey '\ej' accept-line                    # Alt + j : Enter (ejecutar comando) 
 bindkey '\e ' expand-or-complete             # Alt + Espacio : Tab alternativo
+bindkey '\ei' expand-or-complete
 
 # Movimiento del cursor (sin sacar las manos del reposo)
 bindkey '\eh' backward-char                  # Alt + h : Mover a la izquierda (←)
