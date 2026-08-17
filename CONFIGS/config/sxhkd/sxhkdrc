@@ -57,8 +57,8 @@ super + ctrl + {m,x,y,z}
 ##############
 
 # focus the node in the given direction
-super + {_,shift + }{Left,Down,Up,Right}
-	bspc node -{f,s} {west,south,north,east}
+super + {_,shift + }{Left,Down,Up,Right,h,j,k,l}
+	bspc node -{f,s} {west,south,north,east,west,south,north,east}
 
 # focus the node for the given path jump
 super + {p,b,comma,period}
@@ -91,8 +91,8 @@ super + {_,shift + }{1-9,0}
 #############
 
 # preselect the direction
-super + ctrl + {Left,Down,Up,Right}
-	bspc node -p {west,south,north,east}
+super + ctrl + {Left,Down,Up,Right,h,j,k,l}
+	bspc node -p {west,south,north,east,west,south,north,east}
 
 # preselect the ratio
 super + ctrl + {1-9}
@@ -111,20 +111,27 @@ super + ctrl + shift + space
 ###############
 
 # expand a window by moving one of its side outward
-#super + alt + {h,j,k,l}
-#	bspc node -z {left -20 0,bottom 0 20,top 0 -20,right 20 0}
+#super + alt + {Left,Down,Up,Right,h,j,k,l}
+#	bspc node -z {left -50 0,bottom 0 50,top 0 -50,right 50 0,left -50 0,bottom 0 50,top 0 -50,right 50 0}
 
 # contract a window by moving one of its side inward
-#super + alt + shift + {h,j,k,l}
-#	bspc node -z {right -20 0,top 0 20,bottom 0 -20,left 20 0}
+#super + alt + shift + {Left,Down,Up,Right,h,j,k,l}
+#	bspc node -z {right -50 0,top 0 50,bottom 0 -50,left 50 0,right -50 0,top 0 50,bottom 0 -50,left 50 0}
+
+# Expandir ventana / Mover borde hacia afuera
+super + alt + {h,j,k,l,Left,Down,Up,Right}
+	~/.config/bspwm/scripts/bspwm_resize expand {west,south,north,east,west,south,north,east}
+
+# Contraer ventana / Mover borde hacia adentro
+super + alt + shift + {h,j,k,l,Left,Down,Up,Right}
+	~/.config/bspwm/scripts/bspwm_resize contract {west,south,north,east,west,south,north,east}
 
 # move a floating window
-super + shift + {Left,Down,Up,Right}
-	bspc node -v {-20 0,0 20,0 -20,20 0}
+super + shift + ctrl + {Left,Down,Up,Right,h,j,k,l}
+	bspc node -v {-50 0,0 50,0 -50,50 0,-50 0,0 50,0 -50,50 0}
 
-# Custom Resize
-alt + super + {Left,Down,Up,Right}
-	~/.config/bspwm/scripts/bspwm_resize {west,south,north,east}
+super + {_,shift + }r
+	bspc node '@parent' -R {_,-}90
 
 ########################
 # Custom Launchers App #
