@@ -15,8 +15,21 @@ PERCENT=$(echo "$BAT_INFO" | awk -F', ' '{print $2}')
 PERCENT_VALUE=$(echo "$PERCENT" | tr -cd '0-9')
 [ -n "$PERCENT_VALUE" ] && PERCENT="${PERCENT_VALUE}%"
 
-if [ "$STATE" = "Discharging" ]; then
-	echo -e "%{F#FF6B6B}🔋 %{F#e2ee6a}${PERCENT}%{u-}"
+if [ "$PERCENT_VALUE" -ge 90 ]; then
+	ICON=$''
+elif [ "$PERCENT_VALUE" -ge 65 ]; then
+	ICON=$''
+elif [ "$PERCENT_VALUE" -ge 40 ]; then
+	ICON=$''
+elif [ "$PERCENT_VALUE" -ge 15 ]; then
+	ICON=$''
 else
-	echo -e "%{F#6BFF95}⚡🔋 %{F#e2ee6a}${PERCENT}%{u-}"
+	ICON=$''
+fi
+BOLT=$''
+
+if [ "$STATE" = "Discharging" ]; then
+	echo -e "%{F#FF6B6B}%{T9}${ICON}%{T-} %{F#e2ee6a}${PERCENT}%{u-}"
+else
+	echo -e "%{F#6BFF95}%{T10}${BOLT}%{T-} %{T9}${ICON}%{T-} %{F#e2ee6a}${PERCENT}%{u-}"
 fi
