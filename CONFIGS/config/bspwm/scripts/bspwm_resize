@@ -1,16 +1,41 @@
-#!/usr/bin/env dash
+#!/usr/bin/env bash
+
+mode="$1"      # expand o contract
+direction="$2" # west, south, north, east
+step=50
 
 if bspc query -N -n focused.floating > /dev/null; then
-	step=20
+    # ── MODO FLOTANTE: Mueve bordes individuales ──
+    if [ "$mode" = "expand" ]; then
+        case "$direction" in
+            west)  bspc node -z left -$step 0 ;;
+            south) bspc node -z bottom 0 $step ;;
+            north) bspc node -z top 0 -$step ;;
+            east)  bspc node -z right $step 0 ;;
+        esac
+    else # contract (con Shift)
+        case "$direction" in
+            west)  bspc node -z right -$step 0 ;;
+            south) bspc node -z top 0 $step ;;
+            north) bspc node -z bottom 0 -$step ;;
+            east)  bspc node -z left $step 0 ;;
+        esac
+    fi
 else
-	step=100
+    # ── MODO TILED (MOSAICO): Mueve la frontera compartida ──
+    if [ "$mode" = "expand" ]; then
+        case "$direction" in
+            west)  bspc node -z right -$step 0 || bspc node -z left -$step 0 ;;
+            south) bspc node -z bottom 0 $step || bspc node -z top 0 $step ;;
+            north) bspc node -z top 0 -$step   || bspc node -z bottom 0 -$step ;;
+            east)  bspc node -z right $step 0  || bspc node -z left $step 0 ;;
+        esac
+    else # contract (con Shift)
+        case "$direction" in
+            west)  bspc node -z left $step 0    || bspc node -z right $step 0 ;;
+            south) bspc node -z bottom 0 -$step || bspc node -z top 0 -$step ;;
+            north) bspc node -z top 0 $step     || bspc node -z bottom 0 $step ;;
+            east)  bspc node -z right -$step 0  || bspc node -z left -$step 0 ;;
+        esac
+    fi
 fi
-
-case "$1" in
-	west) dir=right; falldir=left; x="-$step"; y=0;;
-	east) dir=right; falldir=left; x="$step"; y=0;;
-	north) dir=top; falldir=bottom; x=0; y="-$step";;
-	south) dir=top; falldir=bottom; x=0; y="$step";;
-esac
-
-bspc node -z "$dir" "$x" "$y" || bspc node -z "$falldir" "$x" "$y"
