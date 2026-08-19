@@ -12,6 +12,10 @@ super + d
 #	/usr/bin/rofi -show drun -theme ~/.config/rofi/launchers/type-7/style-3.rasi
 	~/.config/polybar/scripts/launcher
 
+# configure external monitor (position/on/off)
+super + shift + m
+	~/.config/scripts/monitor_setup.sh
+
 # make sxhkd reload its configuration files:
 super + Escape
 	pkill -USR1 -x sxhkd
@@ -83,8 +87,10 @@ super + {o,i}
 	bspc wm -h on
 
 # focus or send to the given desktop
+# addressed by name (not position) so 1-5 always stay on the notebook
+# monitor (I-V) and 6-0 on the external one (VI-X), regardless of focus
 super + {_,shift + }{1-9,0}
-	bspc {desktop -f,node -d} '^{1-9,10}'
+	bspc {desktop -f,node -d} {I,II,III,IV,V,VI,VII,VIII,IX,X}
 
 #############
 # preselect #
